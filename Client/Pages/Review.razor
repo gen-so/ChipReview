@@ -1,11 +1,17 @@
 ﻿@page "/review"
 @inject HttpClient Http
 
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+
+<span>@HttpContextAccessor.HttpContext.Request.Query["MyParam"][0]</span>
 
 
 <PageTitle>CC1101 Review</PageTitle>
 
 <h1>CC1101 Review</h1>
+
+
 
 
 @if (message == null){
