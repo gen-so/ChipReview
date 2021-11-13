@@ -18,7 +18,7 @@ else {
 @functions {
     string message;
 
-    protected override async Task OnIntializeAsync()
+    protected override async Task OnInitializedAsync()
     {
         message = await Http.GetStringAsync("https://chipreviewapi.azurewebsites.net/api/GetReview");
     }
