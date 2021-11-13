@@ -4,14 +4,10 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 
-<span>@HttpContextAccessor.HttpContext.Request.Query["MyParam"][0]</span>
+<PageTitle>@chip Review</PageTitle>
 
-
-<PageTitle>CC1101 Review</PageTitle>
-
-<h1>CC1101 Review</h1>
-
-
+<p>Chip : @chip</p>
+<p>Vednor : @vendor</p>
 
 
 @if (message == null){
@@ -22,10 +18,12 @@ else {
 }
 
 @functions {
-    string message;
+    string message, chip, vendor;
 
     protected override async Task OnInitializedAsync()
     {
         message = await Http.GetStringAsync("https://chipreviewapi.azurewebsites.net/api/GetReview");
+        vendor = HttpContextAccessor.HttpContext.Request.Query["vendor"][0];
+        chip = HttpContextAccessor.HttpContext.Request.Query["chip"][0];
     }
 }
