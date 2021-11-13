@@ -29,7 +29,8 @@ else {
 
     protected override async Task OnInitializedAsync()
     {
-        message = await Http.GetStringAsync("https://api.chipreview.tk/api/GetReview");
+        //message = await Http.GetStringAsync("https://api.chipreview.tk/api/GetReview");
+        message = await Http.GetStringAsync("/api/GetReview");
        
     }
 }
