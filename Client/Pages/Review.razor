@@ -1,0 +1,25 @@
+﻿@page "/review"
+@inject HttpClient Http
+
+
+
+<PageTitle>CC1101 Review</PageTitle>
+
+<h1>CC1101 Review</h1>
+
+
+@if (message == null){
+    <p>Loading...</p>
+}
+else {
+    <p>@message</p>
+}
+
+@functions {
+    string message;
+
+    protected override async Task OnIntializeAsync()
+    {
+        message = await Http.GetStringAsync("https://chipreviewapi.azurewebsites.net/api/GetReview");
+    }
+}
