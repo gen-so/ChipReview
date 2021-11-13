@@ -32,7 +32,7 @@ namespace BlazorApp.Api
             return summary;
         }
 
-        [FunctionName("WeatherForecast")]
+        [FunctionName("GetReview")]
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
