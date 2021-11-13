@@ -1,7 +1,5 @@
-﻿@page "/review"
+﻿@page "/review/{vendor}/{chip}"
 @inject HttpClient Http
-
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 
 <PageTitle>@chip Review</PageTitle>
@@ -17,13 +15,21 @@ else {
     <p>@message</p>
 }
 
+
+@code {
+    [Parameter]
+    public string? vendor { get; set; }
+    [Parameter]
+    public string? chip { get; set; }
+}
+
+
 @functions {
-    string message, chip, vendor;
+    string message;
 
     protected override async Task OnInitializedAsync()
     {
         message = await Http.GetStringAsync("https://chipreviewapi.azurewebsites.net/api/GetReview");
-        vendor = HttpContextAccessor.HttpContext.Request.Query["vendor"][0];
-        chip = HttpContextAccessor.HttpContext.Request.Query["chip"][0];
+       
     }
 }
