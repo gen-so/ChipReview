@@ -31,28 +31,13 @@ namespace BlazorApp.Api
             [Blob(Consts.API.AccountList, FileAccess.Write)] Stream accountListWrite,
             [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
             [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
-            TraceWriter log) => runApi(ApiName.GetReview, request, configRead, configWrite, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
-        //{
+            TraceWriter log)
+        {
 
-        //get the chip and vendor from caller
-        // string chip = request.Query["chip"];
-        // string vendor = request.Query["vendor"];
-
-
-
-
-
-        //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        //dynamic data = JsonConvert.DeserializeObject(requestBody);
-        //name = name ?? data?.name;
-
-        //string responseMessage = string.IsNullOrEmpty(name)
-        //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-        //    : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-        //return new OkObjectResult(responseMessage);
-        //}
-
+            //send the error message to the user
+            return request.CreateResponse(HttpStatusCode.OK, "Test");
+        }
+        //=> runApi(ApiName.GetReview, request, configRead, configWrite, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
 
 
 
