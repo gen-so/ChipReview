@@ -104,7 +104,7 @@ namespace BlazorApp.Api
         {
             switch (option)
             {
-                case Reply.DomainList:
+                case Reply.ReviewList:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", data));
                 default:
                     throw new Exception("Message for Reply option not found!");
@@ -133,5 +133,7 @@ namespace BlazorApp.Api
         public string getUsername() => _requestData.getChildData<string>(TransferNames.ClientToApi.Username);
 
         public string getEmail() => _requestData.getChildData<string>(TransferNames.ClientToApi.Email);
+        public string getChip() => _requestData.getChildData<string>(TransferNames.ClientToApi.Chip);
+        public string getVendor() => _requestData.getChildData<string>(TransferNames.ClientToApi.Vendor);
     }
 }

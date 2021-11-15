@@ -1,5 +1,9 @@
 ﻿namespace BlazorApp.Api
 {
+
+    /// <summary>
+    /// Hardcoded names that are used between client & API communications
+    /// </summary>
     public static class TransferNames
     {
         public static class ClientToApi
@@ -10,6 +14,8 @@
             public static string Key1 = "Key1";
             public static string Username = "Username";
             public static string Email = "Email";
+            public static string Chip = "chip"; //small caps is used in query
+            public static string Vendor = "vendor"; //small caps is used in query
         }
         public static class ApiToServer
         {

@@ -29,7 +29,7 @@ namespace BlazorApp.Api
             [Blob(Consts.API.AccountList, FileAccess.Write)] Stream accountListWrite,
             [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
             [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
-            TraceWriter log) => runApi(ApiName.CreateAccount, request, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
+            TraceWriter log) => runApi(ApiName.GetReview, request, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
         //{
 
         //get the chip and vendor from caller
@@ -76,19 +76,21 @@ namespace BlazorApp.Api
                     //prepare data
                     var config = new Data(reviewListRead, reviewListWrite);
                     var accountList = new Data(accountListRead, accountListWrite);
+                    var reviewList = new Data(reviewListRead, reviewListWrite);
 
                     //place the data into managers
                     var configManager = new ApiConfigManager(config);
                     var accountManager = new AccountManager(accountList);
+                    var reviewManager = new ReviewManager(reviewList);
 
                     //prepare logic
-                    var api = new API(requestManager, configManager, accountManager);
+                    var api = new API(requestManager, configManager, accountManager, reviewManager);
 
                     //run logic based on api name
                     switch (apiName)
                     {
-                        case ApiName.UpdateDomain:
-                            return api.updateDomain();
+                        case ApiName.GetReview:
+                            return api.getReview();
                         case ApiName.ListDomain:
                             return api.listDomain();
                         case ApiName.AddDomain:

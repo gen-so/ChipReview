@@ -55,6 +55,14 @@ namespace BlazorApp.Api
                 public const string Email = "Email";
             }
 
+            //review-list.xml
+            public static class ReviewList
+            {
+                public const string Review = "Review";
+                public const string Chip = "Chip";
+                public const string Vendor = "Vendor";
+            }
+
             //appLog.xml
             public static class AppLog
             {

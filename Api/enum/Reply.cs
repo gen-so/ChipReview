@@ -28,5 +28,6 @@ namespace BlazorApp.Api
         AccountDeleted,
         UnexpectedError,
         DomainDeleted,
+        ReviewList,
     }
 }

@@ -22,7 +22,7 @@ namespace BlazorApp.Api
         private readonly RequestManager _requestManager;
         private readonly ApiConfigManager _configManager;
         private readonly AccountManager _accountManager;
-        private readonly DomainManager _domainManager;
+        private readonly ReviewManager _reviewManager;
         //private readonly LogManager _logManager;
         private UserAccount _userAccount; //not readonly because can be assigned during account creation
 
@@ -35,12 +35,13 @@ namespace BlazorApp.Api
         /// <summary>
         /// Does all the prep work needed for the actual API functions to work
         /// </summary>
-        public API(RequestManager requestManager, ApiConfigManager configManager, AccountManager accountManager)
+        public API(RequestManager requestManager, ApiConfigManager configManager, AccountManager accountManager, ReviewManager reviewManager)
         {
             //save the data managers
             _requestManager = requestManager;
             _configManager = configManager;
             _accountManager = accountManager;
+            _reviewManager = reviewManager;
             //_domainManager = domainManager;
             //_logManager = logManager;
 
@@ -52,31 +53,51 @@ namespace BlazorApp.Api
 
         /** PUBLIC METHODS **/
 
-        public HttpResponseMessage updateDomain()
+
+        public HttpResponseMessage getReview()
         {
-            //STEP 1:
             //if the account used to make the request doesn't exist, end here with error
             if (_userAccount == null) { return _requestManager.getReply(Reply.ValidationFailed); }
 
+            //get list of reviews based on chip & vendor received in query
+            var chip = _requestManager.getChip();
+            var vendor = _requestManager.getVendor();
+            var reviewList = _reviewManager.getReviewList(chip, vendor);
 
-            //STEP 2:
-            //update DNS server with incoming domain record
-            //if sending to DNS failed, stop here & return error message to caller
-            if (updateDnsRecord() == false) { return _requestManager.getReply(Reply.SendingToDNSFailed); }
+            //get list of domains associated with this user
+            var domainList = _accountManager.getDomainList(_requestManager.getKey1());
 
-
-            //STEP 3:
-            //update local domain record cache
-            //if updating cache failed, stop here & return error message to caller
-            //get ip & domain to update from the request
-            var ipAddress = _requestManager.getIpAddress();
-            var domain = _requestManager.getTopDomain();
-            if (_domainManager.updateCache(ipAddress, domain) == false) { return _requestManager.getReply(Reply.UpdatingCacheFailed); }
-
-
-            //if control gets here, let user know all went well
-            return _requestManager.getReply(Reply.DomainUpdated);
+            //return this list to client
+            return _requestManager.getReply(Reply.ReviewList, reviewList);
         }
+
+
+
+        //public HttpResponseMessage updateDomain()
+        //{
+        //    //STEP 1:
+        //    //if the account used to make the request doesn't exist, end here with error
+        //    if (_userAccount == null) { return _requestManager.getReply(Reply.ValidationFailed); }
+
+
+        //    //STEP 2:
+        //    //update DNS server with incoming domain record
+        //    //if sending to DNS failed, stop here & return error message to caller
+        //    if (updateDnsRecord() == false) { return _requestManager.getReply(Reply.SendingToDNSFailed); }
+
+
+        //    //STEP 3:
+        //    //update local domain record cache
+        //    //if updating cache failed, stop here & return error message to caller
+        //    //get ip & domain to update from the request
+        //    var ipAddress = _requestManager.getIpAddress();
+        //    var domain = _requestManager.getTopDomain();
+        //    if (_domainManager.updateCache(ipAddress, domain) == false) { return _requestManager.getReply(Reply.UpdatingCacheFailed); }
+
+
+        //    //if control gets here, let user know all went well
+        //    return _requestManager.getReply(Reply.DomainUpdated);
+        //}
 
         public HttpResponseMessage listDomain()
         {
