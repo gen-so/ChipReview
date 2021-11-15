@@ -23,13 +23,15 @@ namespace BlazorApp.Api
         [FunctionName("GetReview")]
         public static HttpResponseMessage getReview(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage request,
+            [Blob(Consts.API.Config, FileAccess.Read)] Stream configRead,
+            [Blob(Consts.API.Config, FileAccess.Write)] Stream configWrite,
             [Blob(Consts.API.ReviewList, FileAccess.Read)]Stream reviewListRead,
             [Blob(Consts.API.ReviewList, FileAccess.Write)] Stream reviewListWrite,
             [Blob(Consts.API.AccountList, FileAccess.Read)] Stream accountListRead,
             [Blob(Consts.API.AccountList, FileAccess.Write)] Stream accountListWrite,
             [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
             [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
-            TraceWriter log) => runApi(ApiName.GetReview, request, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
+            TraceWriter log) => runApi(ApiName.GetReview, request, configRead, configWrite, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
         //{
 
         //get the chip and vendor from caller
@@ -58,7 +60,7 @@ namespace BlazorApp.Api
 
         //prepare the needed data managers & calls the right API logic function
         //based on name and returns the their responses
-        private static HttpResponseMessage runApi(ApiName apiName, HttpRequestMessage request, Stream reviewListRead, Stream reviewListWrite, Stream accountListRead, Stream accountListWrite, Stream appLogRead, Stream appLogWrite)
+        private static HttpResponseMessage runApi(ApiName apiName, HttpRequestMessage request, Stream configRead, Stream configWrite, Stream reviewListRead, Stream reviewListWrite, Stream accountListRead, Stream accountListWrite, Stream appLogRead, Stream appLogWrite)
         {
             //final raw error cather for unpredictable failures
             //errors caught here are not logged but details of the error are passed to caller in "more info"
@@ -74,7 +76,7 @@ namespace BlazorApp.Api
                 try
                 {
                     //prepare data
-                    var config = new Data(reviewListRead, reviewListWrite);
+                    var config = new Data(configRead, configWrite);
                     var accountList = new Data(accountListRead, accountListWrite);
                     var reviewList = new Data(reviewListRead, reviewListWrite);
 

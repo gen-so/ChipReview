@@ -37,6 +37,7 @@ namespace BlazorApp.Api
             public const string AccountList = "data/accountList.xml";
             public const string DomainLog = "data/domainLog.xml";
             public const string ReviewList = "data/review-list.xml";
+            public const string Config = "data/config.xml";
             public const string AppLog = "data/appLog.xml";
         }
     }
