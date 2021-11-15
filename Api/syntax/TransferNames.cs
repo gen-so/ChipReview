@@ -14,8 +14,8 @@
             public static string Key1 = "Key1";
             public static string Username = "Username";
             public static string Email = "Email";
-            public static string Chip = "chip"; //small caps is used in query
-            public static string Vendor = "vendor"; //small caps is used in query
+            public static string Chip = "Chip"; 
+            public static string Vendor = "Vendor";
         }
         public static class ApiToServer
         {
