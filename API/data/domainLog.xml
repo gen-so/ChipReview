@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <Record>
+    <Domain>genso.tk</Domain>
+    <IP>192.168.1.5</IP>
+    <Time>2020-11-04T02:30:04.9595337Z</Time>
+  </Record>
+  <Record>
+    <Domain>localhost</Domain>
+    <IP>192.168.1.5</IP>
+    <Time>2020-11-04T02:32:12.1345772Z</Time>
+  </Record>
+  <Record>
+    <Domain>one-remote-server.genso.tk</Domain>
+    <IP>42.190.199.195</IP>
+    <Time>2020-11-04T14:47:05.6852455Z</Time>
+  </Record>
+</Root>
