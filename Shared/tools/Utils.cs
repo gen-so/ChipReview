@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Linq;
-using System.Net;
-using System.Reflection;
 using System.Xml.Linq;
 
-namespace API
+namespace BlazorApp.Shared
 {
     /// <summary>
     /// A collection of tools used for various straighforward computation

@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Xml.Linq;
 
-namespace API
+namespace BlazorApp.Shared
 {
     //TODO method names need more clarity
     /// <summary>

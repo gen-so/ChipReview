@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using BlazorApp.Shared;
+using System.Xml.Linq;
 
 namespace API
 {

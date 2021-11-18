@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BlazorApp.Shared;
+using System;
 using System.Diagnostics;
 using System.Xml.Linq;
 
-namespace API
+namespace BlazorApp.Shared
 {
 
     /// <summary>

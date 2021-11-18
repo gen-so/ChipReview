@@ -1,4 +1,5 @@
 ﻿@page "/{vendor}/{chip}"
+@using BlazorApp.Shared
 @inject HttpClient Http
 
 
@@ -6,34 +7,25 @@
 
 <p>Chip : @chip</p>
 <p>Vendor : @vendor</p>
-<p>Rating : @vendor</p>
 
 
-<p>Reviews</p>
+<p>@reviewCount Reviews</p>
 @if (vendor == null)
 {
     <p><em>Loading reviews...</em></p>
 }
 else
 {
-    <p>@message</p>
    
-}
-
-@code {
-    //private WeatherForecast[] forecasts = new WeatherForecast[]{};
-
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    try
-    //    {
-    //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("/api/WeatherForecast") ?? new WeatherForecast[]{};
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine(ex.ToString());
-    //    }
-    //}
+    @foreach (var review in reviewList)
+            {
+                <p>
+                    <p>@review.Chip</p>
+                    <p>@review.Vendor</p>
+                    <p>@review.Username</p>
+                    <p>@review.ReviewText</p>
+                </p>
+            }
 }
 
 
@@ -48,12 +40,17 @@ else
 
 
 @functions {
-    string message;
+    List<BlazorApp.Shared.Review> reviewList;
+    int reviewCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        //call is made to azure function
-        message = await Http.GetStringAsync("/api/GetReview?chip=CC1101&vendor=TI");
+
+        //get a list of reviews from API server by chip & vendor
+        reviewList = await ServerManager.GetReviewList(chip, vendor);
+
+        //set the review count
+        reviewCount = reviewList.Count;
        
     }
 }

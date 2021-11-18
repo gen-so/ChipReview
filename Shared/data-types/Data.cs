@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace API
+namespace BlazorApp.Shared
 {
     /// <summary>
     /// Represents an XML file that contains data. This calls encapsulates the XML files

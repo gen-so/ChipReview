@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 
 
-namespace API
+namespace BlazorApp.Shared
 {
 
     /// <summary>
