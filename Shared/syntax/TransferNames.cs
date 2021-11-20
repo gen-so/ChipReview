@@ -31,6 +31,7 @@
             public static string Message = "Message";
             public static string ExtraInfo = "ExtraInfo";
             public static string ReviewList = "ReviewList";
+            public static string Title = "Title";
             public static string ReviewText = "Review";
             public static string Username = "Username";
             public static string Time = "Time";

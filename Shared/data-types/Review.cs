@@ -15,8 +15,9 @@ namespace BlazorApp.Shared
         public string Chip { get; set; }
         public string Vendor { get; set; }
         public string Time { get; set; }
+        public string Title { get; set; }
         public string ReviewText { get; set; }
-        public string Rating { get; set; }
+        public int Rating { get; set; }
 
 
 

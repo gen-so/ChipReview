@@ -45,6 +45,7 @@ public class ServerManager
 
         /// <summary>
         /// Gets lists all domains that are linked to the user account
+        /// This is where review gets converted from raw XML to parsed Review object
         /// </summary>
         public static async Task<List<Review>> GetReviewList(string chip, string vendor)
         {
@@ -67,23 +68,26 @@ public class ServerManager
             foreach (var domain in reviewList.Elements())
             {
                 //seperate the raw elements that make a Review
+                //note: if null reference thrown here, than cause is XML file missing element
                 var username = domain.Element(TransferNames.ApiToClient.Username).Value;
+                var title = domain.Element(TransferNames.ApiToClient.Title).Value;
                 var reviewText = domain.Element(TransferNames.ApiToClient.ReviewText).Value;
                 var _chip = domain.Element(TransferNames.ApiToClient.Chip).Value;
                 var _vendor = domain.Element(TransferNames.ApiToClient.Vendor).Value;
-                var rating = domain.Element(TransferNames.ApiToClient.Rating).Value;
+                var rating = int.Parse(domain.Element(TransferNames.ApiToClient.Rating).Value);
                 var time = domain.Element(TransferNames.ApiToClient.Time).Value;
 
 
-                //create a Review & add it to the list
-                var x = new Review();
-                x.Username = username;
-                x.ReviewText = reviewText;
-                x.Chip = _chip;
-                x.Vendor = _vendor;
-                x.Rating = rating;
-                x.Time = time;
-                returnList.Add(x);
+                //create a Review from raw data & add it to the list
+                var parsedReview = new Review();
+                parsedReview.Username = username;
+                parsedReview.Title = title;
+                parsedReview.ReviewText = reviewText;
+                parsedReview.Chip = _chip;
+                parsedReview.Vendor = _vendor;
+                parsedReview.Rating = rating;
+                parsedReview.Time = time;
+                returnList.Add(parsedReview);
             }
 
             //return list to caller

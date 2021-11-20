@@ -26,24 +26,6 @@ namespace API
 
         /** PUBLIC METHODS **/
 
-        /// <summary>
-        /// Gets all the user accounts
-        /// </summary>
-        //public List<UserAccount> getAllAccounts()
-        //{
-        //    //create a list to place the accounts into
-        //    var returnList = new List<UserAccount>();
-
-        //    //get all user accounts into a list (raw XML)
-        //    var allUsers = accountList.getAllRecords();
-
-        //    //place each raw account into a UserAccount structure
-        //    foreach (var user in allUsers)
-        //    {
-        //        returnList.
-        //    }
-
-        //}
 
         /// <summary>
         /// Gets a user account from the inputed key1, returns null if not found
