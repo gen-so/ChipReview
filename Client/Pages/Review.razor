@@ -1,5 +1,6 @@
 ﻿@page "/{vendor}/{chip}"
 @using BlazorApp.Shared
+@using Microsoft.AspNetCore.Mvc
 @inject HttpClient Http
 
 
@@ -14,7 +15,12 @@
     <hr />
 
 
-    <p>@reviewCount Reviews</p>
+    <h2 class="pb-2 border-bottom">
+        Reviews 
+        <a href="review-editor/@vendor/@chip" class="btn btn-primary">
+            Write a review
+        </a>
+    </h2>
 
     <div id="review-list">
 
@@ -42,12 +48,10 @@
     public string? vendor { get; set; }
     [Parameter]
     public string? chip { get; set; }
-}
 
-
-@functions {
     List<BlazorApp.Shared.Review> reviewList;
     int reviewCount = 0;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,4 +63,11 @@
         reviewCount = reviewList.Count;
 
     }
+
+    /// <summary>
+    /// Sends user to review editor page
+    /// </summary>
+    //private IActionResult WriteReview() => new RedirectToPageResult($"/review-editor/{vendor}/{chip}");
+
 }
+

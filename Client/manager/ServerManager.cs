@@ -94,8 +94,12 @@ public class ServerManager
             return returnList;
         }
 
-        //todo reurn pass or fail result
-        public static async void AddNewReview(Review review)
+
+        /// <summary>
+        /// Takes a new Review, created on client side & sends it to API server
+        /// to be added. Response from server is returned to caller
+        /// </summary>
+        public static async Task<Response> AddNewReview(Review review)
         {
             //package data to be sent to API server
             var request = new TransferData();
@@ -111,6 +115,8 @@ public class ServerManager
             //process request & get the response as "raw" message
             var response = await processRequest(Consts.Client.AddNewReviewApi, request, true);
 
+            //send response back to caller
+            return response;
         }
 
 
