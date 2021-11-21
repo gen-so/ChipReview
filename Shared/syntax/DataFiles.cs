@@ -59,11 +59,13 @@ namespace BlazorApp.Shared
             public static class ReviewList
             {
                 public const string Review = "Review";
+                public const string ReviewText = "Review"; //todo sync all review to reviewtext
                 public const string Chip = "Chip";
                 public const string Vendor = "Vendor";
                 public const string Rating = "Rating";
                 public const string Time = "Time";
                 public const string Username = "Username";
+                public const string Title = "Title";
 
             }
 

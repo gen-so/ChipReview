@@ -94,6 +94,25 @@ public class ServerManager
             return returnList;
         }
 
+        //todo reurn pass or fail result
+        public static async void AddNewReview(Review review)
+        {
+            //package data to be sent to API server
+            var request = new TransferData();
+            request.addData(TransferNames.ClientToApi.Chip, review.Chip);
+            request.addData(TransferNames.ClientToApi.Vendor, review.Vendor);
+            request.addData(TransferNames.ClientToApi.Username, review.Username);
+            request.addData(TransferNames.ClientToApi.Rating, review.Rating);
+            request.addData(TransferNames.ClientToApi.Title, review.Title);
+            request.addData(TransferNames.ClientToApi.Time, review.Time);
+            request.addData(TransferNames.ClientToApi.ReviewText, review.ReviewText);
+
+
+            //process request & get the response as "raw" message
+            var response = await processRequest(Consts.Client.AddNewReviewApi, request, true);
+
+        }
+
 
 
         /** PRIVATE METHODS **/

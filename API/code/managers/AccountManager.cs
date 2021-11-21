@@ -87,26 +87,6 @@ namespace API
             return found.Any() ? true : false;
         }
 
-        /// <summary>
-        /// Adds a domain to a user account
-        /// </summary>
-        public void addDomain(string key1, Domain newDomain)
-        {
-            //get the underlying record for the account
-            var record = getAccountRecord(key1);
-
-            ////format the domain to be stored
-            //var formatedDomain = new XElement(DataFiles.API.AccountList.Domain, newDomain);
-
-            //get the element that holds the domains registered to the account
-            var domainListHolder = record.Element(DataFiles.API.AccountList.DomainList);
-
-            //add the new domain into the list
-            domainListHolder.Add(newDomain.toXml());
-
-            //save the changes to the underlying file
-            _accountList.updateUnderlyingFile();
-        }
 
         /// <summary>
         /// Deletes domain from a user account

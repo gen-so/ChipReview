@@ -57,8 +57,8 @@ namespace API
                     return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Domain not available"));
                 case Reply.DomainAvailable:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "Domain available"));
-                case Reply.DomainAdded:
-                    return _rawRequest.CreateResponse(Ok, Message.create("Pass", "Domain added"));
+                case Reply.NewReviewAdded:
+                    return _rawRequest.CreateResponse(Ok, Message.create("Pass", "New review added, thank you!"));
                 case Reply.DomainDeleted:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "Domain deleted"));
                 case Reply.AccountExists:
@@ -74,7 +74,7 @@ namespace API
                 case Reply.AccountDeleted:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "User deleted"));
                 case Reply.UnexpectedError:
-                    return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Unexpected error has occured"));
+                    return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Oops! Unexpected error has occurred"));
                 default:
                     throw new Exception("Message for Reply option not found!");
             }
@@ -138,5 +138,9 @@ namespace API
         public string getEmail() => _requestData.getChildData<string>(TransferNames.ClientToApi.Email);
         public string getChip() => _requestData.getChildData<string>(TransferNames.ClientToApi.Chip);
         public string getVendor() => _requestData.getChildData<string>(TransferNames.ClientToApi.Vendor);
+        public int getRating() => _requestData.getChildData<int>(TransferNames.ClientToApi.Rating);
+        public string getTitle() => _requestData.getChildData<string>(TransferNames.ClientToApi.Title);
+        public string getTime() => _requestData.getChildData<string>(TransferNames.ClientToApi.Time);
+        public string getReviewText() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewText);
     }
 }

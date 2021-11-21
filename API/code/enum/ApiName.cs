@@ -18,6 +18,8 @@ namespace API
         CheckAccount,
         CreateAccount,
         DeleteAccount,
-        GetReview
+        GetReview,
+        AddNewReview
+
     }
 }

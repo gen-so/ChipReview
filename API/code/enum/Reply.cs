@@ -29,5 +29,6 @@ namespace API
         UnexpectedError,
         DomainDeleted,
         ReviewList,
+        NewReviewAdded
     }
 }

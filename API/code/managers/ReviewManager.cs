@@ -169,6 +169,28 @@ namespace API
             return reviewList;
         }
 
+        /// <summary>
+        /// Adds a new review
+        /// </summary>
+        public void addReview(Review newReview)
+        {
+            //get the underlying record for the account
+            //var record = getAccountRecord(key1);
+
+            ////format the domain to be stored
+            //var formatedDomain = new XElement(DataFiles.API.AccountList.Domain, newDomain);
+
+            //get the element that holds the domains registered to the account
+            //var domainListHolder = record.Element(DataFiles.API.AccountList.DomainList);
+
+            //add the new review into the XML list
+            var reviewXml = newReview.ToXml();
+            _reviewList.insertRecord(reviewXml);
+
+            //save the changes to the underlying file
+            //_reviewList.updateUnderlyingFile();
+        }
+
 
 
 
@@ -296,8 +318,6 @@ namespace API
         /// returns a list accounts in their xml form (still linked to their root file)
         /// </summary>
         private IEnumerable<XElement> getAllAccounts() => _reviewList.getAllRecords();
-
-
 
 
     }

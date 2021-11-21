@@ -1,0 +1,212 @@
+﻿@page "/review-editor"
+@inject IJSRuntime JS
+
+
+
+<form id="writeReviewForm">
+    <span>
+        <ul class="bc-list bc-list-nostyle">
+            <li class="bc-list-item" id="review-q-1">
+                <h2 id="a-rating-heading" class="bc-heading bc-color-base">
+                    1. Rating
+                </h2>
+                <div id="" class="bc-row-responsive bc-spacing-top-small" style="">
+                    <div class="bc-col-responsive bc-col-4">
+                        <span class="bc-text bc-size-small bc-color-secondary">
+                            Overall
+                            <span class="bc-letter-space bc-letter-space-base"></span>
+                        </span>
+                        <div class="bc-trigger bc-trigger-tooltip">
+                            <div class="bc-rating-stars" data-star-count="0" role="radiogroup" tabindex="0" aria-describedby="tooltip1637429815725">
+                                <h3 class="bc-pub-offscreen">
+                                    interactive rating stars
+                                </h3>
+                                <span class="bc-rating-star" data-index="1" data-text="Not for me" role="radio" aria-checked="false" aria-label="Not for me" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-icon-star-empty bc-icon-size-small bc-color-active bc-pub-hidden"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-star-empty-s2 bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="2" data-text="It's okay" role="radio" aria-checked="false" aria-label="It's okay" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-icon-star-empty bc-icon-size-small bc-color-active bc-pub-hidden"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-star-empty-s2 bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="3" data-text="Pretty good" role="radio" aria-checked="false" aria-label="Pretty good" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-icon-star-empty bc-icon-size-small bc-color-active bc-pub-hidden"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-star-empty-s2 bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="4" data-text="It's great" role="radio" aria-checked="false" aria-label="It's great" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-icon-star-empty bc-icon-size-small bc-color-active bc-pub-hidden"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-star-empty-s2 bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="5" data-text="I love it" role="radio" aria-checked="false" aria-label="I love it" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-icon-star-empty bc-icon-size-small bc-color-active bc-pub-hidden"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-star-empty-s2 bc-icon-fill-active"></i>
+                                </span>
+                                <input type="hidden" name="overallRating" value="0" class="star-count" />
+                            </div>
+                            <div class="bc-tooltip bc-tooltip-right bc-palette-inverse bc-rating-stars-tooltip bc-hidden" role="tooltip" id="tooltip1637429815725" style="top: -7px;">
+                                <div class="bc-tooltip-inner bc-color-background-inverse bc-color-background-base">
+                                    <div class="bc-tooltip-message bc-color-base">
+                                        It's great
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bc-col-responsive bc-col-4">
+                        <span class="bc-text bc-size-small bc-color-secondary">
+                            Performance
+                            <span class="bc-letter-space bc-letter-space-base"></span>
+                        </span>
+                        <div class="bc-trigger bc-trigger-tooltip">
+                            <div class="bc-rating-stars" data-star-count="0" role="radiogroup" tabindex="0">
+                                <h3 class="bc-pub-offscreen">
+                                    interactive rating stars
+                                </h3>
+                                <span class="bc-rating-star" data-index="1" data-text="Not for me" role="radio" aria-checked="false" aria-label="Not for me" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="2" data-text="It's okay" role="radio" aria-checked="false" aria-label="It's okay" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="3" data-text="Pretty good" role="radio" aria-checked="false" aria-label="Pretty good" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="4" data-text="It's great" role="radio" aria-checked="false" aria-label="It's great" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="5" data-text="I love it" role="radio" aria-checked="false" aria-label="I love it" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <input type="hidden" name="performanceRating" value="0" class="star-count" />
+                            </div>
+                            <div class="bc-tooltip bc-tooltip-right bc-hidden bc-palette-inverse bc-rating-stars-tooltip" role="tooltip">
+                                <div class="bc-tooltip-inner bc-color-background-inverse bc-color-background-base">
+                                    <div class="bc-tooltip-message bc-color-base"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bc-col-responsive bc-col-4">
+                        <span class="bc-text bc-size-small bc-color-secondary">
+                            Story
+                            <span class="bc-letter-space bc-letter-space-base"></span>
+                        </span>
+                        <div class="bc-trigger bc-trigger-tooltip">
+                            <div class="bc-rating-stars" data-star-count="0" role="radiogroup" tabindex="0">
+                                <h3 class="bc-pub-offscreen">
+                                    interactive rating stars
+                                </h3>
+                                <span class="bc-rating-star" data-index="1" data-text="Not for me" role="radio" aria-checked="false" aria-label="Not for me" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="2" data-text="It's okay" role="radio" aria-checked="false" aria-label="It's okay" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="3" data-text="Pretty good" role="radio" aria-checked="false" aria-label="Pretty good" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="4" data-text="It's great" role="radio" aria-checked="false" aria-label="It's great" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <span class="bc-rating-star" data-index="5" data-text="I love it" role="radio" aria-checked="false" aria-label="I love it" tabindex="0">
+                                    <i aria-hidden="true" class="bc-icon bc-icon-fill-active bc-icon-star-empty-s2 star-border bc-pub-hidden bc-icon-star-empty bc-icon-size-small bc-color-active"></i>
+                                    <i aria-hidden="true" class="bc-icon bc-icon-star-empty-s2 bc-icon-star-empty bc-icon-size-small bc-color-active bc-icon-fill-active"></i>
+                                </span>
+                                <input type="hidden" name="storyRating" value="0" class="star-count" />
+                            </div>
+                            <div class="bc-tooltip bc-tooltip-right bc-hidden bc-palette-inverse bc-rating-stars-tooltip" role="tooltip">
+                                <div class="bc-tooltip-inner bc-color-background-inverse bc-color-background-base">
+                                    <div class="bc-tooltip-message bc-color-base"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="bc-list-item bc-spacing-top-base" id="review-q-2">
+                <h2 class="bc-heading">
+                    2. Title
+                </h2>
+                <div id="" class="bc-row-responsive bc-spacing-top-small" style="">
+                    <span class="">
+                        <input @bind="title"
+                        type="text"
+                               role="textbox"
+                               id="review-title"
+                               placeholder="Enter text here"
+                               name="reviewTitle"
+                               maxlength="50"
+                               class="bc-input bc-color-base bc-color-border-focus bc-color-background-base bc-color-border-base"
+                                />
+                    </span>
+                </div>
+                <div id="" class="bc-row-responsive bc-text-right" style="">
+                    <span class="bc-text bc-size-small bc-color-tertiary">
+                        maximum 50 characters
+                    </span>
+                </div>
+            </li>
+            <li class="bc-list-item bc-spacing-top-mini" id="review-q-3">
+                <h2 class="bc-heading">
+                    3. Review
+                </h2>
+                <div id="" class="bc-row-responsive bc-spacing-top-small" style="">
+                    <textarea  @bind="reviewText" class="bc-input bc-color-base bc-color-border-focus bc-color-border-base"
+                              id="review-body"
+                              placeholder="Enter text here"
+                              name="reviewBody"
+                              style="height: 200px;"
+                              role="textbox"
+                              aria-multiline="true"
+                              ></textarea>
+                </div>
+                <div id="" class="bc-row-responsive bc-text-right" style="">
+                    <span class="bc-text bc-size-small bc-color-tertiary">
+                        minimum 15 words and 25 characters
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </span>
+</form>
+
+<button class="btn btn-warning">Cancel</button>
+<button class="btn btn-primary" @onclick="SubmitReview">Submit</button>
+
+
+
+
+@code {
+
+    private int rating { get; set; }
+    private string? reviewText { get; set; }
+    private string? title { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //imports js
+        var js = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/ReviewEditor.razor.js");
+
+
+    }
+
+    //puts review data together & sends it to API
+    private async void  SubmitReview()
+    {
+         //get a list of reviews from API server by chip & vendor
+        ServerManager.AddNewReview(rating, reviewText, title);
+
+        
+    }
+
+}

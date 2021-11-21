@@ -24,16 +24,22 @@ namespace BlazorApp.Shared
 
         /// <summary>
         /// Gets the Review in XML form
+        /// Used when transferring & storage
         /// </summary>
-        public XElement toXml()
+        public XElement ToXml()
         {
-            throw new NotImplementedException();
-            //var subReview = new XElement(DataFiles.Client.Config.SubReview, SubReview);
-            //var topReview = new XElement(DataFiles.Client.Config.TopReview, TopReview);
-            //var fullReview = new XElement(DataFiles.Client.Config.Review, subReview, topReview);
+            //construct an XML version of the Review object
+            var chip = new XElement(DataFiles.API.ReviewList.Chip, Chip);
+            var vendor = new XElement(DataFiles.API.ReviewList.Vendor, Vendor);
+            var username = new XElement(DataFiles.API.ReviewList.Username, Username);
+            var rating = new XElement(DataFiles.API.ReviewList.Rating, Rating);
+            var title = new XElement(DataFiles.API.ReviewList.Title, Title);
+            var time = new XElement(DataFiles.API.ReviewList.Time, Time);
+            var reviewText = new XElement(DataFiles.API.ReviewList.ReviewText, ReviewText);
+            var fullReview = new XElement(DataFiles.API.ReviewList.Review, chip, vendor, username, rating, title, time, reviewText);
 
-            ////return the full Review in xml
-            //return fullReview;
+            //return the full Review in xml
+            return fullReview;
         }
 
 

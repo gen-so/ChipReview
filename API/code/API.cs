@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using BlazorApp.Shared;
+using System.Net.Http;
 
 namespace API
 {
@@ -103,23 +104,25 @@ namespace API
         //    //return _requestManager.getReply(Reply.DomainList, domainList);
         //}
 
-        public HttpResponseMessage addDomain()
+        public HttpResponseMessage addNewReview()
         {
             //if the account used to make the request doesn't exist, end here with error
-            if (_userAccount == null) { return _requestManager.getReply(Reply.ValidationFailed); }
-
-            //check if domain is available
-            //if NOT available, return here & tell user domain not available 
-            if (!isDomainAvailable()) { return _requestManager.getReply(Reply.DomainNotAvailable, extraInfo); }
+            //if (_userAccount == null) { return _requestManager.getReply(Reply.ValidationFailed); }
 
             //if available full domain add to account
-            var subDomain = _requestManager.getSubDomain();
-            var topDomain = _requestManager.getTopDomain();
-            var newDomain = new Domain(subDomain, topDomain);
-            _accountManager.addDomain(_userAccount.Key1, newDomain);
+            var newReview = new Review();
+            newReview.Chip = _requestManager.getChip();
+            newReview.Vendor = _requestManager.getVendor();
+            newReview.Username = _requestManager.getUsername();
+            newReview.Rating = _requestManager.getRating();
+            newReview.Title = _requestManager.getTitle();
+            newReview.Time = _requestManager.getTime();
+            newReview.ReviewText = _requestManager.getReviewText();
+
+            _reviewManager.addReview(newReview);
 
             //let user know domain has been added to account
-            return _requestManager.getReply(Reply.DomainAdded);
+            return _requestManager.getReply(Reply.NewReviewAdded);
         }
 
 

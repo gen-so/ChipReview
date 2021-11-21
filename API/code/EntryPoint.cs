@@ -11,35 +11,6 @@ namespace API
 {
     public static class EntryPoint
     {
-        //[FunctionName("GetReview")]
-        //public static HttpResponseMessage Run(
-        //    [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest request,
-        //    [Blob(Consts.API.Config, FileAccess.Read)] Stream configRead,
-        //    [Blob(Consts.API.Config, FileAccess.Write)] Stream configWrite,
-        //    [Blob(Consts.API.ReviewList, FileAccess.Read)] Stream reviewListRead,
-        //    [Blob(Consts.API.ReviewList, FileAccess.Write)] Stream reviewListWrite,
-        //    [Blob(Consts.API.AccountList, FileAccess.Read)] Stream accountListRead,
-        //    [Blob(Consts.API.AccountList, FileAccess.Write)] Stream accountListWrite,
-        //    [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
-        //    [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
-        //    ILogger log)
-        //{
-        //    log.LogInformation("C# HTTP trigger function processed a request.");
-
-
-        //    string responseMessage = "Hellow WOELD!!" + configRead.Length;
-
-        //    var meeting = await request.ReadAsStringAsync();
-
-        //    //var x = runApi(ApiName.GetReview, request, configRead, configWrite, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
-
-
-        //    return new OkObjectResult(responseMessage);
-        //}
-
-
-
-
 
         [FunctionName("GetReview")]
         public static HttpResponseMessage getReview(
@@ -53,6 +24,20 @@ namespace API
         [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
         [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
         TraceWriter log) => runApi(ApiName.GetReview, request, configRead, configWrite, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
+
+
+        [FunctionName("AddNewReview")]
+        public static HttpResponseMessage addNewReview(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage request,
+        [Blob(Consts.API.Config, FileAccess.Read)] Stream configRead,
+        [Blob(Consts.API.Config, FileAccess.Write)] Stream configWrite,
+        [Blob(Consts.API.ReviewList, FileAccess.Read)] Stream reviewListRead,
+        [Blob(Consts.API.ReviewList, FileAccess.Write)] Stream reviewListWrite,
+        [Blob(Consts.API.AccountList, FileAccess.Read)] Stream accountListRead,
+        [Blob(Consts.API.AccountList, FileAccess.Write)] Stream accountListWrite,
+        [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
+        [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
+        TraceWriter log) => runApi(ApiName.AddNewReview, request, configRead, configWrite, reviewListRead, reviewListWrite, accountListRead, accountListWrite, appLogRead, appLogWrite);
 
 
 
@@ -94,8 +79,8 @@ namespace API
                     {
                         case ApiName.GetReview:
                             return api.getReview();
-                        case ApiName.AddDomain:
-                            return api.addDomain();
+                        case ApiName.AddNewReview:
+                            return api.addNewReview();
                         case ApiName.CheckAccount:
                             return api.checkAccount();
                         default:

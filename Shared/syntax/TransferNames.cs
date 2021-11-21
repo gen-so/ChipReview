@@ -16,6 +16,10 @@
             public static string Email = "Email";
             public static string Chip = "Chip"; 
             public static string Vendor = "Vendor";
+            public static string Rating = "Rating";
+            public static string Title = "Title";
+            public static string Time = "Time";
+            public static string ReviewText = "Review";
         }
         public static class ApiToServer
         {

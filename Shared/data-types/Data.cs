@@ -156,14 +156,15 @@ namespace BlazorApp.Shared
         }
 
         /// <summary>
-        /// Inserts record into XML document
-        /// </summary>set
+        /// Inserts record into XML document, and saves the changes
+        /// Note: No need to update underlying file after this
+        /// </summary>
         public void insertRecord(XElement record)
         {
             //add new record to the document
             _document.Root.Add(record);
 
-            //save changes underlying file
+            //save changes to underlying file
             updateUnderlyingFile();
 
         }
