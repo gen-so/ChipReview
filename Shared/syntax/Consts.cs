@@ -26,6 +26,12 @@
         }
 
 
+
+
+        /// <summary>
+        /// Azure Function accesses the files stored in container via paths below
+        /// Since azure function is linked to storage account, full URL to storage not needed
+        /// </summary>
         public static class API
         {
             //PATHS TO DATA FILES STORED IN AZURE DATA BLOB 
