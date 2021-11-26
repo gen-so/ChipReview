@@ -1,5 +1,11 @@
 ﻿@page "/review-editor/{vendor}/{chip}"
 @inject IJSRuntime JS
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+
 
 
 <p>Review for @chip by @vendor</p>
@@ -108,10 +114,6 @@ else
 
 
 
-
-
-
-
 @code {
 
     //VARIABLES
@@ -119,12 +121,19 @@ else
     public string? vendor { get; set; }
     [Parameter]
     public string? chip { get; set; }
+
+    //user logged in data
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+
+
     //the new review is stored as it is made
     private BlazorApp.Shared.Review Review { get; set; }
     //keeps track if the review was submitted successfully
     private bool _submittedSuccess = false;
     //true when review is being submitted
     private bool _submittingReview = false;
+
 
 
 
@@ -153,14 +162,21 @@ else
         Review.Vendor = vendor;
 
 
+        //add in username if logged in else user Anonymous
+        var authState = await AuthState;
+        var user = authState.User;
+        Review.Username = user.Identity.IsAuthenticated ? user.Identity?.Name : "Anonymous";
+
+        //show loading message
         _submittingReview = true;
 
         //send to api server & get response
         var response = await ServerManager.AddNewReview(Review);
 
-        //mark it if it passed or failed
+        //mark as passed or failed
         _submittedSuccess = response.IsPass();
 
+        //refresh the page variables
         this.StateHasChanged();
     }
 

@@ -14,7 +14,7 @@ builder.Services.AddOidcAuthentication(options =>
     // Configure your authentication provider options here.
     // For more information, see https://aka.ms/blazor-standalone-auth
     builder.Configuration.Bind("Local", options.ProviderOptions);
-    options.ProviderOptions.DefaultScopes.Add("openid");
+    //options.ProviderOptions.DefaultScopes.Add("openid");
 
 });
 
