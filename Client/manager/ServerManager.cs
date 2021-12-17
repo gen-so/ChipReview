@@ -35,7 +35,7 @@ public class ServerManager
             request.addData(TransferNames.ClientToApi.Key1, key1);
 
             //process request & handle all related events
-            var result = await processRequest(Consts.Client.DeleteAccountApi, request);
+            var result = await processRequest(Consts.Client.DeleteAccount, request);
 
             //return the result of the request processing
             return result;
@@ -47,7 +47,7 @@ public class ServerManager
         /// Gets lists all domains that are linked to the user account
         /// This is where review gets converted from raw XML to parsed Review object
         /// </summary>
-        public static async Task<List<Review>> GetReviewList(string chip, string vendor)
+        public static async Task<List<Review>?> GetReviewList(string chip, string vendor)
         {
             //package data to be sent to API server
             var request = new TransferData();
@@ -56,7 +56,7 @@ public class ServerManager
 
 
             //process request & get the response as "raw" message
-            var response = await processRequest(Consts.Client.GetReviewListApi, request, true);
+            var response = await processRequest(Consts.Client.GetReviewList, request, true);
 
             //get the domain list from response data
             var messageInXml = Utils.StringToXml(response.Message);
@@ -96,10 +96,63 @@ public class ServerManager
 
 
         /// <summary>
+        /// Gets all reviews, for debugging purposes
+        /// </summary>
+        public static async Task<List<Review>> GetReviewListAll()
+        {
+            //package data to be sent to API server
+            var request = new TransferData();
+            //request.addData(TransferNames.ClientToApi.Chip, chip);
+            //request.addData(TransferNames.ClientToApi.Vendor, vendor);
+
+            //process request & get the response as "raw" message
+            var response = await processRequest(Consts.Client.GetReviewListAll, request, true);
+
+            //get the domain list from response data
+            var messageInXml = Utils.StringToXml(response.Message);
+            var reviewList = messageInXml.Element(TransferNames.ApiToClient.ReviewList);
+
+
+            //go through each review element and add it to return list
+            var returnList = new List<Review>();
+            foreach (var domain in reviewList.Elements())
+            {
+                //seperate the raw elements that make a Review
+                //note: if null reference thrown here, than cause is XML file missing element
+                var username = domain.Element(TransferNames.ApiToClient.Username)?.Value;
+                var title = domain.Element(TransferNames.ApiToClient.Title)?.Value;
+                var reviewText = domain.Element(TransferNames.ApiToClient.ReviewText)?.Value;
+                var _chip = domain.Element(TransferNames.ApiToClient.Chip)?.Value;
+                var _vendor = domain.Element(TransferNames.ApiToClient.Vendor)?.Value;
+                var rating = int.Parse(domain.Element(TransferNames.ApiToClient.Rating)?.Value);
+                var time = domain.Element(TransferNames.ApiToClient.Time)?.Value;
+
+
+                //create a Review from raw data & add it to the list
+                var parsedReview = new Review
+                {
+                    Username = username,
+                    Title = title,
+                    ReviewText = reviewText,
+                    Chip = _chip,
+                    Vendor = _vendor,
+                    Rating = rating,
+                    Time = time
+                };
+                returnList.Add(parsedReview);
+            }
+
+            //return list to caller
+            return returnList;
+        }
+
+
+
+        /// <summary>
         /// Takes a new Review, created on client side & sends it to API server
         /// to be added. Response from server is returned to caller
         /// </summary>
-        public static async Task<Response> AddNewReview(Review review)
+        public static async Task<Response> AddNewReview(Review? review)
         {
             //package data to be sent to API server
             var request = new TransferData();
@@ -113,7 +166,25 @@ public class ServerManager
 
 
             //process request & get the response as "raw" message
-            var response = await processRequest(Consts.Client.AddNewReviewApi, request, true);
+            var response = await processRequest(Consts.Client.AddNewReview, request, true);
+
+            //send response back to caller
+            return response;
+        }
+
+        
+        /// <summary>
+        /// Gets hash code of the review and sends it to delete API
+        /// </summary>
+        public static async Task<Response> DeleteReview(Review? review)
+        {
+            //package data to be sent to API server
+            var request = new TransferData();
+            request.addData(TransferNames.ClientToApi.ReviewHash, review.GetHashCode());
+
+
+            //process request & get the response as "raw" message
+            var response = await processRequest(Consts.Client.DeleteReview, request, true);
 
             //send response back to caller
             return response;

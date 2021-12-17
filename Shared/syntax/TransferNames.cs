@@ -20,6 +20,7 @@
             public static string Title = "Title";
             public static string Time = "Time";
             public static string ReviewText = "Review";
+            public static string ReviewHash = "ReviewHash";
         }
         public static class ApiToServer
         {

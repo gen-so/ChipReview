@@ -63,6 +63,33 @@ namespace API
             //return this list to client
             return _requestManager.getReply(Reply.ReviewList, reviewList);
         }
+        public HttpResponseMessage getReviewAll()
+        {
+            //if the account used to make the request doesn't exist, end here with error
+            //if (_userAccount == null) { return _requestManager.getReply(Reply.ValidationFailed); }
+
+            //get list of reviews based on chip & vendor received in query
+            //var chip = _requestManager.getChip();
+            //var vendor = _requestManager.getVendor();
+            var reviewList = _reviewManager.getReviewListAll();
+
+            //get list of domains associated with this user
+            //var domainList = _accountManager.getDomainList(_requestManager.getKey1());
+
+            //return this list to client
+            return _requestManager.getReply(Reply.ReviewList, reviewList);
+        }
+        public HttpResponseMessage deleteReview()
+        {
+            //get the hash of the review to be deleted
+            var reviewHash = _requestManager.getReviewHash();
+
+            //delete the review with matching hash
+            bool result = _reviewManager.deleteReview(reviewHash);
+
+            //return pass or fail result to caller
+            return result ? _requestManager.getReply(Reply.ReviewDeleted) : _requestManager.getReply(Reply.ReviewNotDeleted);
+        }
 
 
 

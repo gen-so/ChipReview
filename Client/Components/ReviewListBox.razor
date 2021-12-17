@@ -1,0 +1,55 @@
+﻿@using BlazorApp.Shared
+@using Microsoft.AspNetCore.Mvc
+@inject HttpClient _http;
+@inject GlobalVariableManager _globalVariable;
+@inject NavigationManager Navigation
+
+
+
+<div class="list-group">
+
+    @foreach (var review in ReviewList)
+    {
+        <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+            <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+            <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">@review.Title | @review.Username | @review.Rating</h6>
+                    <p class="mb-0 opacity-75">@review.ReviewText</p>
+                </div>
+                <small class="opacity-50 text-nowrap">@review.Time</small>
+
+                @*Only show Delete & edit button if the user is the same*@
+                <AuthorizeView>
+                    <Authorized>
+                        @if (@context.User.Identity?.Name == @review.Username && @context.User.Identity?.Name != "Anonymous") //no edit for Anonymous users
+                        {
+                            <button class="btn btn-info btn-sm" @onclick="()=>EditReview(review)">Edit</button>
+                        }
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </a>
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public List<Review?>? ReviewList { get; set; }
+
+    /// <summary>
+    /// Sends user to edit the review
+    /// </summary>
+    private void EditReview(Review? review)
+    {
+        //place review in global variable
+        _globalVariable.ReviewInFocus = review;
+
+        //redirect user to review editor page
+        Navigation.NavigateTo($"/review-editor");
+    }
+
+
+}

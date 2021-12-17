@@ -4,16 +4,16 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc
 @attribute [AllowAnonymous]
-@inject HttpClient Http
+@inject HttpClient _http;
 
 
-<PageTitle>@chip | Review</PageTitle>
+<PageTitle>@Chip | Review</PageTitle>
 
 
 
 <div style="display:grid">
 
-    <ChipInfoBox Chip=@chip Vendor=@vendor/>
+    <ChipInfoBox Chip=@Chip Vendor=@Vendor/>
 
 
     <hr />
@@ -21,25 +21,21 @@
 
     <h2 class="pb-2 border-bottom">
         Reviews 
-        <a href="review-editor/@vendor/@chip" class="btn btn-primary">
+        <a href="review-editor/@Vendor/@Chip" class="btn btn-primary">
             Write a review
         </a>
     </h2>
 
-    <div id="review-list">
+    <div id="review-list"  style="margin-bottom: 100px;">
 
-        @if (reviewCount == 0)
+        @if (_reviewCount == 0)
         {
             <p><em>Loading...</em></p>
         }
         else
         {
-            @foreach (var review in reviewList)
-            {
-                <ReviewBox Review=review/>
-            }
+            <ReviewListBox ReviewList=_reviewList/>
         }
-
     </div>
 </div>
 
@@ -51,22 +47,22 @@
 
 @code {
     [Parameter]
-    public string? vendor { get; set; }
+    public string? Vendor { get; set; }
     [Parameter]
-    public string? chip { get; set; }
+    public string? Chip { get; set; }
 
-    List<BlazorApp.Shared.Review> reviewList;
-    int reviewCount = 0;
+    List<BlazorApp.Shared.Review>? _reviewList;
+    int _reviewCount = 0;
 
 
     protected override async Task OnInitializedAsync()
     {
 
         //get a list of reviews from API server by chip & vendor
-        reviewList = await ServerManager.GetReviewList(chip, vendor);
+        _reviewList = await ServerManager.GetReviewList(Chip, Vendor);
 
         //set the review count
-        reviewCount = reviewList.Count;
+        _reviewCount = _reviewList.Count;
 
     }
 

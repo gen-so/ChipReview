@@ -11,15 +11,11 @@
 
         public static class Client
         {
-            public const string UpdateDomainApi = "https://api-ddns-genso.azurewebsites.net/api/UpdateDomain";
-            public const string GetReviewListApi = "https://chipreviewapi.azurewebsites.net/api/GetReview";
-            public const string AddNewReviewApi = "https://chipreviewapi.azurewebsites.net/api/AddNewReview"; //todo impliment
-            
-            public const string AddDomainApi = "https://api-ddns-genso.azurewebsites.net/api/AddDomain";
-            public const string DeleteDomainApi = "https://api-ddns-genso.azurewebsites.net/api/DeleteDomain";
-            public const string CheckAccountApi = "https://api-ddns-genso.azurewebsites.net/api/CheckAccount";
-            public const string CreateAccountApi = "https://api-ddns-genso.azurewebsites.net/api/CreateAccount";
-            public const string DeleteAccountApi = "https://api-ddns-genso.azurewebsites.net/api/DeleteAccount";
+            public const string GetReviewList = "https://chipreviewapi.azurewebsites.net/api/GetReview";
+            public const string GetReviewListAll = "https://chipreviewapi.azurewebsites.net/api/GetReviewAll";
+            public const string AddNewReview = "https://chipreviewapi.azurewebsites.net/api/AddNewReview";
+            public const string DeleteReview = "https://chipreviewapi.azurewebsites.net/api/DeleteReview";
+            public const string DeleteAccount = "https://api-ddns-genso.azurewebsites.net/api/DeleteAccount";
 
             public const string Config = "data\\config.xml";
             public const string IpCache = "data\\ip-cache.xml";

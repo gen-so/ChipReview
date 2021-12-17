@@ -170,6 +170,24 @@ namespace API
         }
 
         /// <summary>
+        /// Gets all reviews, debug purposes
+        /// </summary>
+        public XElement getReviewListAll()
+        {
+
+            //filter review list by chip & vendor
+            var found =
+                from record in getAllReviewsAsXml()
+                select record;
+
+            //place list inside a xml element
+            var reviewList = new XElement("ReviewList");
+            reviewList.Add(found);
+
+            return reviewList;
+        }
+
+        /// <summary>
         /// Adds a new review
         /// </summary>
         public void addReview(Review newReview)
@@ -191,6 +209,17 @@ namespace API
             //_reviewList.updateUnderlyingFile();
         }
 
+        public bool deleteReview(string reviewHash)
+        {
+            //get the record (xml) that holds the review info
+            var accountRecord = getAccountRecord(key1);
+
+            //delete the record based on the account record
+            _reviewList.deleteRecord(accountRecord);
+
+            //save the changes permenantly
+            _reviewList.updateUnderlyingFile();
+        }
 
 
 
@@ -211,6 +240,32 @@ namespace API
                     record.Element(DataFiles.API.AccountList.KEY2)?.Value,
                     record.Element(DataFiles.API.AccountList.LOCK)?.Value)
                 select record;
+
+            return found.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets review record by hash, returned in as XML
+        /// </summary>
+        private XElement getReviewRecord(string key1)
+        {
+            //get only the record which key1 can unlock
+            var found =
+                from record in getAllReviewsAsXml()
+                where
+                    record.Element(DataFiles.API.ReviewList.Hash)?.Value == chip &&
+                select record;
+
+
+            //filter review list by chip & vendor
+            var found =
+                from record in getAllReviewsAsXml()
+                where
+                    record.Element(DataFiles.API.ReviewList.Chip)?.Value == chip &&
+                    record.Element(DataFiles.API.ReviewList.Vendor)?.Value == vendor
+                select record;
+
+
 
             return found.FirstOrDefault();
         }

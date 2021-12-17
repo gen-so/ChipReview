@@ -19,7 +19,8 @@ namespace API
         CreateAccount,
         DeleteAccount,
         GetReview,
-        AddNewReview
-
+        AddNewReview,
+        GetReviewAll,
+        DeleteReview
     }
 }

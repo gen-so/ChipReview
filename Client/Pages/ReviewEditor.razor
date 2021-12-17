@@ -1,33 +1,71 @@
 ﻿@page "/review-editor/{vendor}/{chip}"
-@inject IJSRuntime JS
+@page "/review-editor"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
-@inject NavigationManager Navigation
-@inject SignOutSessionStateManager SignOutManager
+@inject NavigationManager _navigation
+@inject SignOutSessionStateManager _signOutManager
+@inject GlobalVariableManager _globalVariable;
 
 
 
-<p>Review for @chip by @vendor</p>
+<p>Review for @Review.Chip by @Review.Vendor</p>
 
-<hr/>
+<hr />
 
 @*If page called without a chip & vendor ask show chip vendor box*@
-
 @*Once submitted successfully, hide the form and show pass message to user*@
-@if (!_submittedSuccess)
+
+@*Thank you message*@
+@if (_submittedSuccess)
 {
-    @*When submitting review show loading on page*@
-    @if (_submittingReview)
-    {
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold">Thank you.</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Your review will help others make informed decisions.<br />After reviewing your review, we will put it up asap.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="@Vendor/@Chip"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button></a>
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Write another review</button>
             </div>
         </div>
-    }
-    else
-    {
+    </div>
+
+}
+
+@*Delete message*@
+@if (_deletedSuccess)
+{
+    <div class="px-4 py-5 my-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <h1 class="display-5 fw-bold">Review deleted.</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Your review will help others make informed decisions.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="@Vendor/@Chip"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button></a>
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Write another review</button>
+            </div>
+        </div>
+    </div>
+
+}
+
+@*When submitting review show loading on page*@
+@if (_submittingReview)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+}
+
+
+
+@*Review editor form*@
+@if (!_deletedSuccess && !_submittedSuccess && !_submittingReview)
+{
+    @*Review editor form*@
     <form id="writeReviewForm">
         <span>
             <ul class="bc-list bc-list-nostyle">
@@ -92,24 +130,9 @@
     </form>
 
     <button class="btn btn-warning">Cancel</button>
+    <button class="btn btn-danger" @onclick="DeleteReview">Delete</button>
     <button class="btn btn-primary" @onclick="SubmitReview">Submit</button>
 
-    }
-
-}
-else
-{
-    <div class="px-4 py-5 my-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-        <h1 class="display-5 fw-bold">Thank you.</h1>
-        <div class="col-lg-6 mx-auto">
-            <p class="lead mb-4">Your review will help others make informed decisions.<br/>After reviewing your review, we will put it up asap.</p>
-            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <a href="@vendor/@chip"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button></a>
-                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Write another review</button>
-            </div>
-        </div>
-    </div>
 }
 
 
@@ -118,19 +141,23 @@ else
 
     //VARIABLES
     [Parameter]
-    public string? vendor { get; set; }
+    public string? Vendor { get; set; }
     [Parameter]
-    public string? chip { get; set; }
+    public string? Chip { get; set; }
+
+    [Parameter]
+    public BlazorApp.Shared.Review? Review { get; set; }
+
+    //state to track if new review or edit an existing review
+    private bool _newReview = false;
 
     //user logged in data
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
 
-
-    //the new review is stored as it is made
-    private BlazorApp.Shared.Review Review { get; set; }
     //keeps track if the review was submitted successfully
     private bool _submittedSuccess = false;
+    private bool _deletedSuccess = false;
     //true when review is being submitted
     private bool _submittingReview = false;
 
@@ -141,26 +168,43 @@ else
     //CTOR
     public ReviewEditor()
     {
-        //an empty review is placed first //todo could place a static template
-        Review = new BlazorApp.Shared.Review();
     }
 
 
 
     //FUNCTIONS
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        //imports js //todo temp for reference
-        var js = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/ReviewEditor.razor.js");
+        //if chip and vendor was not provided
+        if (Chip == null && Vendor == null)
+        {
+            //try get review from global variables, end here
+            if (_globalVariable.ReviewInFocus != null)
+            {
+                Review = _globalVariable.ReviewInFocus;
+            }
+            else
+            {
+                //else set up page as for new review
+                _newReview = true;
+                //a new empty review is used
+                Review = new BlazorApp.Shared.Review();
+            }
+        }
+        else
+        {
+            //add in the chip & vendor details from url
+            Review.Chip = Chip;
+            Review.Vendor = Vendor;
+        }
+
+        //refresh the page
+        this.StateHasChanged();
     }
 
     //sends the newly created review to API
     private async void SubmitReview()
     {
-        //add in the chip & vendor details
-        Review.Chip = chip;
-        Review.Vendor = vendor;
-
 
         //add in username if logged in else user Anonymous
         var authState = await AuthState;
@@ -180,4 +224,36 @@ else
         this.StateHasChanged();
     }
 
+    /// <summary>
+    /// Sends a delete request to API
+    /// </summary>
+    private async void DeleteReview()
+    {
+        //show loading message
+        _submittingReview = true;
+
+        //send to api server & get response
+        var response = await ServerManager.DeleteReview(Review);
+
+        //mark as passed or failed
+        _deletedSuccess = response.IsPass();
+
+        //refresh the page variables
+        this.StateHasChanged();
+    }
+
+
+
+
+
+
+
+    //ARCHIED CODE
+
+    //@inject IJSRuntime JS
+    //imports js //todo temp for reference
+    //var js = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/ReviewEditor.razor.js");
+
 }
+
+

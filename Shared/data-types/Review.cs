@@ -20,6 +20,17 @@ namespace BlazorApp.Shared
         public int Rating { get; set; }
 
 
+        /// <summary>
+        /// CTOR Used to set default values the review items
+        /// </summary>
+        public Review()
+        {
+            Username = "Anonymous";
+            Title = "Best Review Ever!";
+            ReviewText = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam";
+            Rating = 5;
+        }
+
 
 
         /// <summary>
@@ -59,12 +70,46 @@ namespace BlazorApp.Shared
         }
 
 
-        public override bool Equals(object obj)
+
+
+        /** METHOD OVERRIDES **/
+        public override bool Equals(object value)
         {
-            throw new NotImplementedException();
-            //return (obj as Review)?.FullReview == this.FullReview;
+
+            if (value.GetType() == typeof(Review))
+            {
+                //cast to type
+                var parsedValue = (Review)value;
+
+                //check equality
+                bool returnValue = (this.GetHashCode() == parsedValue.GetHashCode());
+
+                return returnValue;
+            }
+            else
+            {
+                //Return false if value is null
+                return false;
+            }
+
+
         }
 
-        //todo override hashcode
+        public override int GetHashCode()
+        {
+            //get hash of all the fields & combine them
+            //title & text not included because they can change
+            var hash1 = Username.GetHashCode();
+            var hash2 = Chip.GetHashCode();
+            var hash3 = Vendor.GetHashCode();
+            var hash4 = Time.GetHashCode();
+
+            return hash1 + hash2 + hash3 + hash4;
+        }
+
+        public override string ToString()
+        {
+            return $"{Username} - {Chip} - {Vendor} - {Time}";
+        }
     }
 }

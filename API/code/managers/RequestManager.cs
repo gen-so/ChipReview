@@ -59,8 +59,8 @@ namespace API
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "Domain available"));
                 case Reply.NewReviewAdded:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "New review added, thank you!"));
-                case Reply.DomainDeleted:
-                    return _rawRequest.CreateResponse(Ok, Message.create("Pass", "Domain deleted"));
+                case Reply.ReviewDeleted:
+                    return _rawRequest.CreateResponse(Ok, Message.create("Pass", "Review deleted"));
                 case Reply.AccountExists:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "User exists"));
                 case Reply.NoAccountExists:
@@ -69,8 +69,8 @@ namespace API
                     return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Invalid data"));
                 case Reply.AccountCreated:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "New user created"));
-                case Reply.AccountNotCreated:
-                    return _rawRequest.CreateResponse(Ok, Message.create("Fail", "User not created"));
+                case Reply.ReviewNotDeleted:
+                    return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Review not deleted"));
                 case Reply.AccountDeleted:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", "User deleted"));
                 case Reply.UnexpectedError:
@@ -132,9 +132,7 @@ namespace API
         /// </summary>
         public string getTopDomain() => _requestData.getChildData<string>(TransferNames.ClientToApi.TopDomain);
         public string getSubDomain() => _requestData.getChildData<string>(TransferNames.ClientToApi.SubDomain);
-
         public string getUsername() => _requestData.getChildData<string>(TransferNames.ClientToApi.Username);
-
         public string getEmail() => _requestData.getChildData<string>(TransferNames.ClientToApi.Email);
         public string getChip() => _requestData.getChildData<string>(TransferNames.ClientToApi.Chip);
         public string getVendor() => _requestData.getChildData<string>(TransferNames.ClientToApi.Vendor);
@@ -142,5 +140,6 @@ namespace API
         public string getTitle() => _requestData.getChildData<string>(TransferNames.ClientToApi.Title);
         public string getTime() => _requestData.getChildData<string>(TransferNames.ClientToApi.Time);
         public string getReviewText() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewText);
+        public string getReviewHash() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewHash);
     }
 }

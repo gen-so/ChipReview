@@ -24,10 +24,10 @@ namespace API
         AccountCreated,
         NotValidAccountData,
         InvalidAccountData,
-        AccountNotCreated,
+        ReviewNotDeleted,
         AccountDeleted,
         UnexpectedError,
-        DomainDeleted,
+        ReviewDeleted,
         ReviewList,
         NewReviewAdded
     }
