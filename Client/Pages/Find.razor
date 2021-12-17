@@ -1,58 +1,29 @@
 ﻿@page "/find"
+@inject NavigationManager Navigation
+
 
 <PageTitle>Find a chip</PageTitle>
 
 
-<div class="dropdown-menu d-flex align-items-stretch p-3 rounded-3 shadow-lg" style="width: 600px" id="dropdownMega">
-    <nav class="d-grid gap-2 col-8">
-        <a href="#" class="btn btn-hover-light d-flex align-items-center gap-3 py-2 px-3 lh-sm">
-            <svg class="bi" width="32" height="32"><use xlink:href="#image-fill"></use></svg>
-            <div>
-                <strong class="d-block">Features</strong>
-                <small>Take a tour through the product</small>
-            </div>
-        </a>
-        <a href="#" class="btn btn-hover-light d-flex align-items-center gap-3 py-2 px-3 lh-sm">
-            <svg class="bi" width="32" height="32"><use xlink:href="#question-circle"></use></svg>
-            <div>
-                <strong class="d-block">Support</strong>
-                <small>Get help from our support crew</small>
-            </div>
-        </a>
-    </nav>
-    <div class="col-4">
-        ...
-    </div>
-</div>
-
-
-<div class="d-flex gap-5 justify-content-center" id="dropdownFilter">
-
-    <div class="dropdown-menu pt-0 mx-0 rounded-3 shadow overflow-hidden" style="width: 280px;">
-        <form class="p-2 mb-2 bg-light border-bottom">
-            <input type="search" class="form-control" autocomplete="false" placeholder="Type to filter..." control-id="ControlID-1">
-        </form>
-        <ul class="list-unstyled mb-0">
-            <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
-                <span class="d-inline-block bg-success rounded-circle" style="width: .5em; height: .5em;"></span>
-                Action
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
-                <span class="d-inline-block bg-primary rounded-circle" style="width: .5em; height: .5em;"></span>
-                Another action
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
-                <span class="d-inline-block bg-danger rounded-circle" style="width: .5em; height: .5em;"></span>
-                Something else here
-            </a></li>
-            <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#">
-                <span class="d-inline-block bg-info rounded-circle" style="width: .5em; height: .5em;"></span>
-                Separated link
-            </a></li>
-        </ul>
-    </div>
-</div>
+<label for="vendor">Vendor/Manufacturer:</label>
+<input @bind="Vendor" id="vendor" type="text"><br><br>
+<label for="chip">Chip:</label>
+<input @bind="Chip" id="chip" type="text"><br><br>
+<button class="btn btn-danger" @onclick="FindChip">Find</button>
 
 
 @code {
+    //VARIABLES
+    public string? Vendor { get; set; }
+    public string? Chip { get; set; }
+
+
+
+    //sends user to chip's page
+    private async void FindChip()
+    {
+        Navigation.NavigateTo($"/{Vendor}/{Chip}");
+
+    }
+
 }
