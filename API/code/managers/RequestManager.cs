@@ -14,10 +14,10 @@ namespace API
     /// <summary>
     /// Encapsulates the raw request coming from user
     /// </summary>
-    public class RequestManager
+    public static class RequestManager
     {
-        private HttpRequestMessage _rawRequest;
-        private TransferData _requestData;
+        private static HttpRequestMessage _rawRequest;
+        private static TransferData _requestData;
 
 
         //shortcut for return codes
@@ -26,7 +26,11 @@ namespace API
         private const HttpStatusCode BadRequest = HttpStatusCode.BadRequest;
 
 
-        public RequestManager(HttpRequestMessage request)
+        /// <summary>
+        /// Initializes the request manager with a request.
+        /// The first thing to do before using the manager
+        /// </summary>
+        public static void Initialize(HttpRequestMessage request)
         {
             _rawRequest = request;
 
@@ -40,7 +44,7 @@ namespace API
         /// <summary>
         /// Gets the preset response to send back to caller, based on inputed Reply option
         /// </summary>
-        public HttpResponseMessage getReply(Reply option)
+        public static HttpResponseMessage getReply(Reply option)
         {
             switch (option)
             {
@@ -50,9 +54,6 @@ namespace API
                     return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Failed to update DNS server"));
                 case Reply.UpdatingCacheFailed:
                     return _rawRequest.CreateResponse(Ok, Message.create("Fail", "DNS updated, but cache update failed"));
-                case Reply.DomainUpdated:
-                    //use ip & domain found in request to update
-                    return _rawRequest.CreateResponse(Ok, Message.create("Pass", $"{getTopDomain()} -> {getIpAddress()}"));
                 case Reply.DomainNotAvailable:
                     return _rawRequest.CreateResponse(Ok, Message.create("Fail", "Domain not available"));
                 case Reply.DomainAvailable:
@@ -85,7 +86,7 @@ namespace API
         /// Gets the preset response to send back to caller, based on inputed Reply option
         /// but with added data from caller
         /// </summary>
-        public HttpResponseMessage getReply(Reply option, string data)
+        public static HttpResponseMessage getReply(Reply option, string data)
         {
             switch (option)
             {
@@ -102,12 +103,15 @@ namespace API
         /// <summary>
         /// Gets the preset response to send back to caller, based on inputed Reply option
         /// but with added data from caller
+        /// NOTE: if adding an option, remember to case it here
         /// </summary>
-        public HttpResponseMessage getReply(Reply option, XElement data)
+        public static HttpResponseMessage getReply(Reply option, XElement data)
         {
             switch (option)
             {
                 case Reply.ReviewList:
+                    return _rawRequest.CreateResponse(Ok, Message.create("Pass", data));
+                case Reply.ChipList:
                     return _rawRequest.CreateResponse(Ok, Message.create("Pass", data));
                 default:
                     throw new Exception("Message for Reply option not found!");
@@ -116,30 +120,14 @@ namespace API
         }
 
 
-        /// <summary>
-        /// Gets the KEY1 found in the request data
-        /// </summary>
-        /// <returns></returns>
-        //public string getKey1() => _requestData.getChildData<string>(TransferNames.ClientToApi.Key1);
-
-        /// <summary>
-        /// Gets the IP address found in the request data
-        /// </summary>
-        public string getIpAddress() => _requestData.getChildData<string>(TransferNames.ClientToApi.IP);
-
-        /// <summary>
-        /// Gets the domain found in the request data
-        /// </summary>
-        public string getTopDomain() => _requestData.getChildData<string>(TransferNames.ClientToApi.TopDomain);
-        public string getSubDomain() => _requestData.getChildData<string>(TransferNames.ClientToApi.SubDomain);
-        public string getUsername() => _requestData.getChildData<string>(TransferNames.ClientToApi.Username);
-        public string getEmail() => _requestData.getChildData<string>(TransferNames.ClientToApi.Email);
-        public string getChip() => _requestData.getChildData<string>(TransferNames.ClientToApi.Chip);
-        public string getVendor() => _requestData.getChildData<string>(TransferNames.ClientToApi.Vendor);
-        public int getRating() => _requestData.getChildData<int>(TransferNames.ClientToApi.Rating);
-        public string getTitle() => _requestData.getChildData<string>(TransferNames.ClientToApi.Title);
-        public string getTime() => _requestData.getChildData<string>(TransferNames.ClientToApi.Time);
-        public string getReviewText() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewText);
-        public string getReviewHash() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewHash);
+        public static string getUsername() => _requestData.getChildData<string>(TransferNames.ClientToApi.Username);
+        public static string getEmail() => _requestData.getChildData<string>(TransferNames.ClientToApi.Email);
+        public static string getChip() => _requestData.getChildData<string>(TransferNames.ClientToApi.Chip);
+        public static string getVendor() => _requestData.getChildData<string>(TransferNames.ClientToApi.Vendor);
+        public static int getRating() => _requestData.getChildData<int>(TransferNames.ClientToApi.Rating);
+        public static string getTitle() => _requestData.getChildData<string>(TransferNames.ClientToApi.Title);
+        public static string getTime() => _requestData.getChildData<string>(TransferNames.ClientToApi.Time);
+        public static string getReviewText() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewText);
+        public static string getReviewHash() => _requestData.getChildData<string>(TransferNames.ClientToApi.ReviewHash);
     }
 }

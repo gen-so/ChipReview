@@ -21,6 +21,7 @@ namespace API
         GetReview,
         AddNewReview,
         GetReviewAll,
-        DeleteReview
+        DeleteReview,
+        GetChipAll
     }
 }

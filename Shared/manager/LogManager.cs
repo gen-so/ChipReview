@@ -17,7 +17,7 @@ namespace BlazorApp.Shared
     ///       the time & log type is an xml element but, in text form it is just tab separated
     ///       todo maybe if needed this can be unified so, text form can go xml and vice versa
     /// </summary>
-    public static class LogManager
+    public static class LogManager 
     {
 
         /** INTERNAL TYPES **/
@@ -38,7 +38,7 @@ namespace BlazorApp.Shared
         /** FIELDS **/
 
         private static Data _logFile = null;
-
+        private static bool _logSet;
 
 
 
@@ -61,23 +61,35 @@ namespace BlazorApp.Shared
         /// <summary>
         /// Files where logs are saved.
         /// If not set logs will be saved to "LogText"
-        /// Note: Set only once before any logging begins
+        /// Note: Set only once before any logging begins by Initialize()
         /// </summary>
         public static Data LogFile
         {
             get => _logFile;
-            set
-            {
-                //log file can only be set once,
-                //if set again raise alarm
-                if (_logFile != null) { throw new Exception("Log file set more than once!"); }
-
-                _logFile = value;
-            }
+            private set => _logFile = value;
         }
 
 
+        
+        
         /** PUBLIC METHODS **/
+
+
+        /// <summary>
+        /// Sets the log file,call once before using other methods
+        ///  NOTE: No need to call this method if not using file/stream for logs
+        /// </summary>
+        public static void Initialize(Data log)
+        {
+            LogFile = log;
+
+            //log file can only be set once,if set again raise alarm
+            if (_logSet) { Error("Log file set more than once!");}
+
+            //mark log file as set
+            _logSet = true;
+        }
+
         /// <summary>
         /// Log an error from the exception
         /// </summary>
@@ -234,6 +246,11 @@ namespace BlazorApp.Shared
         /// Adds message to the main log at a new line
         /// </summary>
         private static void AddToLog(string message, LogType debug) => LogText += $"\n{Utils.GetNow()}:\t{debug}:\t{message}";
+
+        public static void Initialize(object data)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

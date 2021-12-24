@@ -11,147 +11,25 @@ namespace API
     /// Is in charge of things pretaining to all the reviews,
     /// Encapsulates the ReviewList XML file, the only one allowed to read & write to said file
     /// </summary>
-    public class ReviewManager
+    public static class ReviewManager
     {
 
         /** BACKING FIELDS **/
-        private readonly Data _reviewList;
+        private static Data _reviewList;
 
 
 
         /** CTOR **/
-        public ReviewManager(Data reviewList) => _reviewList = reviewList;
+        public static void Initialize(Data reviewList) => _reviewList = reviewList;
 
 
 
         /** PUBLIC METHODS **/
 
-
-        /// <summary>
-        /// Gets a user account from the inputed key1, returns null if not found
-        /// </summary>
-        public UserAccount getAccount(string key1)
-        {
-            //get the raw account record (xml)
-            var rawRecord = getAccountRecord(key1);
-
-            //if the raw record exists return the structred user account
-            if (rawRecord != null)
-            {
-                var id = rawRecord.Element(DataFiles.API.AccountList.ID).Value;
-                var username = rawRecord.Element(DataFiles.API.AccountList.Username).Value;
-                var email = rawRecord.Element(DataFiles.API.AccountList.Email).Value;
-                var key2 = rawRecord.Element(DataFiles.API.AccountList.KEY2).Value;
-                var _lock = rawRecord.Element(DataFiles.API.AccountList.LOCK).Value;
-                var account = new UserAccount(id, username, email, key1, key2, _lock);
-                return account;
-            }
-            //else return null,
-            else
-            {
-                return null;
-            }
-
-        }
-
-        /// <summary>
-        /// Check if the inputed domain is in use by another account
-        /// </summary>
-        public bool isDomainInUse(string domain)
-        {
-            //get all domains in use
-            var allDomains = getAllDomainsInUse();
-
-            //search the list to for the requested domain
-            var found = from rec in allDomains where rec.Value == domain select rec;
-
-            //if domain found, let user know
-            return found.Any() ? true : false;
-        }
-
-        /// <summary>
-        /// Adds a domain to a user account
-        /// </summary>
-        public void addDomain(string key1, Domain newDomain)
-        {
-            //get the underlying record for the account
-            var record = getAccountRecord(key1);
-
-            ////format the domain to be stored
-            //var formatedDomain = new XElement(DataFiles.API.AccountList.Domain, newDomain);
-
-            //get the element that holds the domains registered to the account
-            var domainListHolder = record.Element(DataFiles.API.AccountList.DomainList);
-
-            //add the new domain into the list
-            domainListHolder.Add(newDomain.toXml());
-
-            //save the changes to the underlying file
-            _reviewList.updateUnderlyingFile();
-        }
-
-        /// <summary>
-        /// Deletes domain from a user account
-        /// </summary>
-        public void deleteDomain(string key1, Domain domain)
-        {
-            //get the underlying record for the account
-            var record = getAccountRecord(key1);
-
-            //get the element that holds the domains registered to the account
-            var domainListHolder = record.Element(DataFiles.API.AccountList.DomainList);
-
-            //get the record that holds that domain
-            var foundRecords = from domainRecord in domainListHolder.Elements()
-                               where Domain.fromXml(domainRecord).Equals(domain)
-                               select domainRecord;
-
-            //delete the record for the domain
-            foundRecords.Remove();
-
-            //save the changes permenantly
-            _reviewList.updateUnderlyingFile();
-        }
-
-        public void createAccount(string username, string email, string key1)
-        {
-            //generate the needed data
-            var id = getNewId();
-            var key2 = getNewKey2();
-            var _lock = getNewLock(key1, key2);
-
-            //put together the new account record
-            var newRecord = new XElement(DataFiles.API.AccountList.Record,
-                            new XElement(DataFiles.API.AccountList.ID, id),
-                            new XElement(DataFiles.API.AccountList.Username, username),
-                            new XElement(DataFiles.API.AccountList.Email, email),
-                            new XElement(DataFiles.API.AccountList.KEY2, key2),
-                            new XElement(DataFiles.API.AccountList.LOCK, _lock),
-                            //on creation account list will always be empty, domains are added seperately
-                            new XElement(DataFiles.API.AccountList.DomainList)
-                        );
-
-            //place new record into main account list
-            _reviewList.insertRecord(newRecord);
-        }
-
-        public void deleteAccount(string key1)
-        {
-            //get the record (xml) that hold the account info
-            var accountRecord = getAccountRecord(key1);
-
-            //delete the record based on the account record
-            _reviewList.deleteRecord(accountRecord);
-
-            //save the changes permenantly
-            _reviewList.updateUnderlyingFile();
-
-        }
-
         /// <summary>
         /// Gets review list based on chip & vendor, returns in xml format
         /// </summary>
-        public XElement getReviewList(string chip, string vendor)
+        public static XElement getReviewList(string chip, string vendor)
         {
 
             //filter review list by chip & vendor
@@ -172,7 +50,7 @@ namespace API
         /// <summary>
         /// Gets all reviews, debug purposes
         /// </summary>
-        public XElement getReviewListAll()
+        public static XElement getReviewListAll()
         {
 
             //filter review list by chip & vendor
@@ -190,7 +68,7 @@ namespace API
         /// <summary>
         /// Adds a new review
         /// </summary>
-        public void addReview(Review newReview)
+        public static void addReview(Review newReview)
         {
             //get the underlying record for the account
             //var record = getAccountRecord(key1);
@@ -209,15 +87,15 @@ namespace API
             //_reviewList.updateUnderlyingFile();
         }
 
-        public bool deleteReview(string reviewHash)
+        public static void deleteReview(string reviewHash)
         {
             //get the record (xml) that holds the review info
-            var accountRecord = getAccountRecord(key1);
+            var reviewRecord = getReviewRecord(reviewHash);
 
-            //delete the record based on the account record
-            _reviewList.deleteRecord(accountRecord);
+            //delete the reviews found
+            _reviewList.deleteRecord(reviewRecord);
 
-            //save the changes permenantly
+            //save the changes permanently
             _reviewList.updateUnderlyingFile();
         }
 
@@ -230,7 +108,7 @@ namespace API
         /// <summary>
         /// Gets the account record from main list based on key1, returns null if not found
         /// </summary>
-        private XElement getAccountRecord(string key1)
+        private static XElement getAccountRecord(string key1)
         {
             //get only the record which key1 can unlock
             var found =
@@ -247,22 +125,13 @@ namespace API
         /// <summary>
         /// Gets review record by hash, returned in as XML
         /// </summary>
-        private XElement getReviewRecord(string key1)
+        private static XElement getReviewRecord(string reviewHash)
         {
-            //get only the record which key1 can unlock
+            //get only the record which hash match
             var found =
                 from record in getAllReviewsAsXml()
                 where
-                    record.Element(DataFiles.API.ReviewList.Hash)?.Value == chip &&
-                select record;
-
-
-            //filter review list by chip & vendor
-            var found =
-                from record in getAllReviewsAsXml()
-                where
-                    record.Element(DataFiles.API.ReviewList.Chip)?.Value == chip &&
-                    record.Element(DataFiles.API.ReviewList.Vendor)?.Value == vendor
+                    record.Element(DataFiles.API.ReviewList.Hash)?.Value == reviewHash
                 select record;
 
 
@@ -273,17 +142,17 @@ namespace API
         /// <summary>
         /// Returns a list accounts in their xml form (still linked to their root file)
         /// </summary>
-        private IEnumerable<XElement> getAllAccountsAsXml() => _reviewList.getAllRecords();
+        private static IEnumerable<XElement> getAllAccountsAsXml() => _reviewList.getAllRecords();
 
         /// <summary>
         /// Returns a list of reviews in their xml form (still linked to their root file)
         /// </summary>
-        private IEnumerable<XElement> getAllReviewsAsXml() => _reviewList.getAllRecords();
+        private static IEnumerable<XElement> getAllReviewsAsXml() => _reviewList.getAllRecords();
 
         /// <summary>
         /// checks if key1 can unlock key2 and lock
         /// </summary>
-        private bool isKeyMatch(string key1, string key2, string originalLock)
+        private static bool isKeyMatch(string key1, string key2, string originalLock)
         {
             //combine both keys
             var combinedKey = key1 + key2;
@@ -298,7 +167,7 @@ namespace API
         /// <summary>
         /// Gets all the domains in use by users, returns in XML
         /// </summary>
-        private List<XElement> getAllDomainsInUse()
+        private static List<XElement> getAllDomainsInUse()
         {
             //get all user accounts into a list (raw XML)
             var allUsers = _reviewList.getAllRecords();
@@ -321,58 +190,6 @@ namespace API
             return returnList;
         }
 
-        /// <summary>
-        /// Generates a new lock from the inputed keys
-        /// Lock is the hash of key1 & key2 (SHA256)
-        /// </summary>
-        private string getNewLock(string key1, string key2) => Utils.StringToHash(key1 + key2);
-
-        /// <summary>
-        /// Generates a new key2 based on current server time
-        /// time now > unix timestamp (ms) > sha256
-        /// </summary>
-        private string getNewKey2()
-        {
-            //get timestamp
-            var timestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds().ToString();
-
-            //get the hash of the timestamp (sha256)
-            var sha256 = Utils.StringToHash(timestamp);
-
-            //return the hash to the caller
-            return sha256;
-        }
-
-        /// <summary>
-        /// Generates a new ID for a new user, 
-        /// based on already existing user records 
-        /// </summary>
-        private int getNewId()
-        {
-            //find the biggest id in the main account list 
-            var idElement = DataFiles.API.AccountList.ID;
-
-            int biggestId;
-
-            try
-            {
-                biggestId = getAllAccounts().Max(el => int.Parse(el.Element(idElement).Value));
-            }
-            //if there is an error getting the biggest id, default to biggest ID 0
-            //possible error when first account is created
-            catch (Exception)
-            {
-                biggestId = 0;
-            }
-
-            //increament the id by 1 & return it to caller
-            return biggestId + 1;
-        }
-
-        /// <summary>
-        /// returns a list accounts in their xml form (still linked to their root file)
-        /// </summary>
-        private IEnumerable<XElement> getAllAccounts() => _reviewList.getAllRecords();
 
 
     }

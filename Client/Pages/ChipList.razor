@@ -1,0 +1,42 @@
+﻿@page "/chip-list"
+
+<PageTitle>List of Chips</PageTitle>
+
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Model</th>
+        <th scope="col">Vendor</th>
+        <th scope="col">Total Rating</th>
+        <th scope="col">Review Count</th>
+        <th scope="col">Release Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var chip in _chipList)
+    {
+        <tr>
+            <td scope="row">@chip.Model</td>
+            <td>@chip.Vendor</td>
+            <td>@chip.TotalRating</td>
+            <td>@chip.ReviewCount</td>
+            <td>@chip.ReleaseDate</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+
+@code {
+
+    List<BlazorApp.Shared.Chip> _chipList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //get a list of all chips from API server
+        _chipList = await ServerManager.GetChipListAll();
+    }
+
+}

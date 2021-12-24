@@ -36,6 +36,7 @@
             public static string Message = "Message";
             public static string ExtraInfo = "ExtraInfo";
             public static string ReviewList = "ReviewList";
+            public static string ChipList = "ChipList";
             public static string Title = "Title";
             public static string ReviewText = "Review";
             public static string Username = "Username";
@@ -43,6 +44,11 @@
             public static string Rating = "Rating";
             public static string Chip = "Chip";
             public static string Vendor = "Vendor";
+            public static string Model = "Model";
+            public static string TotalRating = "TotalRating";
+            public static string ReviewCount = "ReviewCount";
+            public static string ReleaseDate = "ReleaseDate";
+
         }
 
     }

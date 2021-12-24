@@ -29,6 +29,7 @@ namespace API
         UnexpectedError,
         ReviewDeleted,
         ReviewList,
-        NewReviewAdded
+        NewReviewAdded,
+        ChipList
     }
 }

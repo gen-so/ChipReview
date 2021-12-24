@@ -13,6 +13,7 @@
         {
             public const string GetReviewList = "https://chipreviewapi.azurewebsites.net/api/GetReview";
             public const string GetReviewListAll = "https://chipreviewapi.azurewebsites.net/api/GetReviewAll";
+            public const string GetChipListAll = "https://chipreviewapi.azurewebsites.net/api/GetChipAll";
             public const string AddNewReview = "https://chipreviewapi.azurewebsites.net/api/AddNewReview";
             public const string DeleteReview = "https://chipreviewapi.azurewebsites.net/api/DeleteReview";
             public const string DeleteAccount = "https://api-ddns-genso.azurewebsites.net/api/DeleteAccount";
@@ -34,6 +35,7 @@
             public const string AccountList = "chip-review-site-data/accountList.xml";
             public const string DomainLog = "chip-review-site-data/domainLog.xml";
             public const string ReviewList = "chip-review-site-data/review-list.xml";
+            public const string ChipList = "chip-review-site-data/chip-list.xml";
             public const string Config = "chip-review-site-data/config.xml";
             public const string AppLog = "chip-review-site-data/appLog.xml";
         }

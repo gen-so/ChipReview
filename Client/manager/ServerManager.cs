@@ -10,19 +10,17 @@ using System.Windows;
 using System.Xml.Linq;
 
 namespace BlazorApp.Client
-{ 
+{
     /// <summary>
-    /// Encapsulates all thing todo with server (API)
+    /// Encapsulates all thing to do with server (API)
     /// </summary>
-public class ServerManager
+    public class ServerManager
     {
 
         /** EVENTS **/
 
 
         /** PUBLIC METHODS **/
-
-
 
         /// <summary>
         /// Delete the user account at the server
@@ -40,7 +38,6 @@ public class ServerManager
             //return the result of the request processing
             return result;
         }
-
 
 
         /// <summary>
@@ -100,13 +97,13 @@ public class ServerManager
         /// </summary>
         public static async Task<List<Review>> GetReviewListAll()
         {
+
             //package data to be sent to API server
             var request = new TransferData();
-            //request.addData(TransferNames.ClientToApi.Chip, chip);
-            //request.addData(TransferNames.ClientToApi.Vendor, vendor);
 
             //process request & get the response as "raw" message
             var response = await processRequest(Consts.Client.GetReviewListAll, request, true);
+
 
             //get the domain list from response data
             var messageInXml = Utils.StringToXml(response.Message);
@@ -147,6 +144,48 @@ public class ServerManager
         }
 
 
+        /// <summary>
+        /// Gets all chips, for debugging purposes
+        /// Calls API server
+        /// </summary>
+        public static async Task<List<Chip>> GetChipListAll()
+        {
+            //prepare a request to API server
+            var request = new TransferData();
+            var response = await processRequest(Consts.Client.GetChipListAll, request, true);
+
+            //get the response and extract the data
+            var messageInXml = Utils.StringToXml(response.Message);
+            var reviewList = messageInXml.Element(TransferNames.ApiToClient.ChipList);
+
+            //go through each raw chip data and add it to return list
+            var returnList = new List<Chip>();
+            foreach (var domain in reviewList.Elements())
+            {
+                //separate the raw elements that make a Chip
+                //note: if null reference thrown here, than cause is XML file missing element
+                var model = domain.Element(TransferNames.ApiToClient.Model)?.Value;
+                var vendor = domain.Element(TransferNames.ApiToClient.Vendor)?.Value;
+                var totalRating = int.Parse(domain.Element(TransferNames.ApiToClient.TotalRating)?.Value);
+                var reviewCount = int.Parse(domain.Element(TransferNames.ApiToClient.ReviewCount)?.Value);
+                var releaseDate = domain.Element(TransferNames.ApiToClient.ReleaseDate)?.Value;
+
+                //create a Chip from raw data & add it to the list
+                var parsedChip = new Chip
+                {
+                    Model = model,
+                    Vendor = vendor,
+                    TotalRating = totalRating,
+                    ReviewCount = reviewCount,
+                    ReleaseDate = releaseDate
+                };
+                returnList.Add(parsedChip);
+            }
+
+            //return list to caller
+            return returnList;
+        }
+
 
         /// <summary>
         /// Takes a new Review, created on client side & sends it to API server
@@ -172,7 +211,7 @@ public class ServerManager
             return response;
         }
 
-        
+
         /// <summary>
         /// Gets hash code of the review and sends it to delete API
         /// </summary>
@@ -216,21 +255,26 @@ public class ServerManager
 
 
             //-----------------------------FUNCTIONS---------------------------------
-            
+
+
             //extracts the a raw data into a Response data structure
             Response ParseResponse(bool rawMessage, TransferData transferData)
             {
                 //get the data from the API server's reply
                 var status = transferData.getChildData<string>(TransferNames.ApiToClient.Status);
-
+                
+                //TODO raw var probably not needed, mark for deletion
                 //if "raw" has been specified then get the Message as XML element else get the value inside the Message element
                 var message =
                     rawMessage
                         ? transferData.getChild(TransferNames.ApiToClient.Message).ToString()
                         : transferData.getChildData<string>(TransferNames.ApiToClient.Message);
 
+                //get the extra info
+                var extraInfo = transferData.getChildData<string>(TransferNames.ApiToClient.ExtraInfo);
+
                 //package the data nicely and return to caller
-                var response = new Response(status, message);
+                var response = new Response(status, message, extraInfo);
                 return response;
             }
 
@@ -258,51 +302,60 @@ public class ServerManager
 
                 return response;
             }
+            
 
             void LogResponse(Response response)
             {
                 //report success & failure to log manager
-                if (response.IsFail()) 
-                { LogManager.Error(response.Message); }
-                else 
+                if (response.IsFail())
+                {
+                    //NOTE: debug reasons both log & console error print is used
+                    Console.WriteLine(response.ToString());
+                    LogManager.Error(response.Message);
+                }
+                else
                 { LogManager.Debug(response.Message); }
             }
         }
 
-        
 
-        /** ARCHIVED CODE **/
 
-        //private async Task<XElement> listDomainApi(string key1)
-        //{
-        //    //prepare to request for list
-        //    var request = new TransferData();
-        //    request.addData(TransferNames.ClientToApi.Key1, key1); //for validation
-
-        //    //send request to server and get response
-        //    var response = await Transfer.sendHttpData(Path.Client.ListDomainsApi, request);
-
-        //    //todo no internet handling here
-        //    //if reponse is null no internet, end here & let caller know
-        //    //if (response == null) { raiseNoInternetWarning(); return; }
-
-        //    //get the list from data
-        //    var xmlResponseData = response.getDataAsXml();
-        //    var info = xmlResponseData.Element(TransferNames.ApiToClient.Info);
-        //    var domainList = info.Element(TransferNames.ApiToClient.DomainList);
-
-        //    //var listInXml = XElement.Parse(listAsString);
-
-        //    //return domain list to caller
-
-        //    //throw new NotImplementedException();
-
-        //    return domainList;
-        //}
 
     }
 }
 
+
+
+
+
+/** ARCHIVED CODE **/
+
+//private async Task<XElement> listDomainApi(string key1)
+//{
+//    //prepare to request for list
+//    var request = new TransferData();
+//    request.addData(TransferNames.ClientToApi.Key1, key1); //for validation
+
+//    //send request to server and get response
+//    var response = await Transfer.sendHttpData(Path.Client.ListDomainsApi, request);
+
+//    
+//    //if reponse is null no internet, end here & let caller know
+//    //if (response == null) { raiseNoInternetWarning(); return; }
+
+//    //get the list from data
+//    var xmlResponseData = response.getDataAsXml();
+//    var info = xmlResponseData.Element(TransferNames.ApiToClient.Info);
+//    var domainList = info.Element(TransferNames.ApiToClient.DomainList);
+
+//    //var listInXml = XElement.Parse(listAsString);
+
+//    //return domain list to caller
+
+//    //throw new NotImplementedException();
+
+//    return domainList;
+//}
 
 
 //ARCHIVED CODE
@@ -401,7 +454,7 @@ public class ServerManager
 //    request.addData(TransferNames.ClientToApi.Key1, key1); //for validation
 
 //    //send request to server and get response
-//    //todo change to new process request method
+//   
 //    var response = await Transfer.sendHttpData(Path.Client.CheckAccountApi, request);
 
 //    //if account exist, return the key1

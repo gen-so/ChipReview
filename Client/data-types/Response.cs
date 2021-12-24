@@ -12,14 +12,17 @@ namespace BlazorApp.Client
     /// </summary>
     public class Response
     {
-        public Response(string status, string message)
+        public Response(string status, string message, string extraInfo)
         {
             Status = status;
             Message = message;
+            ExtraInfo = extraInfo;
         }
 
         public string Status { get; }
         public string Message { get; }
+        public string ExtraInfo { get; }
+
 
         /// <summary>
         /// Returns true if the response failed
@@ -31,5 +34,10 @@ namespace BlazorApp.Client
         public bool IsPass() => Status == "Pass";
 
 
+
+        //OVERRIDES
+
+
+        public override string ToString() => $"Status :{Status}\nMessage :{Message}\nExtraInfo :{ExtraInfo}";
     }
 }

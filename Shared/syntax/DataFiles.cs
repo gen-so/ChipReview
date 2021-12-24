@@ -59,7 +59,7 @@ namespace BlazorApp.Shared
             public static class ReviewList
             {
                 public const string Review = "Review";
-                public const string ReviewText = "Review"; //todo sync all review to reviewtext
+                public const string ReviewText = "Review"; //todo sync all review to "review text"
                 public const string Chip = "Chip";
                 public const string Vendor = "Vendor";
                 public const string Rating = "Rating";
@@ -71,6 +71,19 @@ namespace BlazorApp.Shared
                 ///       it is used as ID & during searching don't have initialize
                 ///       review again (performance benefit) 
                 /// </summary>
+                public const string Hash = "Hash";
+
+            }
+
+            //chip-list.xml
+            public static class ChipList
+            {
+                public const string Chip = "Chip";
+                public const string Model = "Model";
+                public const string Vendor = "Vendor";
+                public const string TotalRating = "TotalRating";
+                public const string ReviewCount = "ReviewCount";
+                public const string ReleaseDate = "ReleaseDate";
                 public const string Hash = "Hash";
 
             }
