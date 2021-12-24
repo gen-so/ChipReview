@@ -1,6 +1,5 @@
-﻿@page "/review-editor/{vendor}/{chip}"
+﻿@page "/review-editor/{VendorUrl}/{ChipUrl}"
 @page "/review-editor"
-@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 @inject NavigationManager _navigation
@@ -20,12 +19,12 @@
 @if (_submittedSuccess)
 {
     <div class="px-4 py-5 my-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" width="72" height="57">
         <h1 class="display-5 fw-bold">Thank you.</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">Your review will help others make informed decisions.<br />After reviewing your review, we will put it up asap.</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <a href="@Vendor/@Chip"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button></a>
+                <button @onclick="BackToChipButtonClicked" type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button>
                 <button type="button" class="btn btn-outline-secondary btn-lg px-4">Write another review</button>
             </div>
         </div>
@@ -37,12 +36,12 @@
 @if (_deletedSuccess)
 {
     <div class="px-4 py-5 my-5 text-center">
-        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" width="72" height="57">
         <h1 class="display-5 fw-bold">Review deleted.</h1>
         <div class="col-lg-6 mx-auto">
             <p class="lead mb-4">Your review will help others make informed decisions.</p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <a href="@Vendor/@Chip"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button></a>
+                <button @onclick="BackToChipButtonClicked" type="button" class="btn btn-primary btn-lg px-4 gap-3">Back to chip page</button>
                 <button type="button" class="btn btn-outline-secondary btn-lg px-4">Write another review</button>
             </div>
         </div>
@@ -143,11 +142,12 @@
 
     //VARIABLES
     [Parameter]
-    public string? Vendor { get; set; }
+    public string? VendorUrl { get; set; } //data from URL not necessary provided
     [Parameter]
-    public string? Chip { get; set; }
+    public string? ChipUrl { get; set; } //data from URL not necessary provided
 
     [Parameter]
+    //main place where review is stored
     public BlazorApp.Shared.Review? Review { get; set; }
 
     //state to track if new review or edit an existing review
@@ -165,20 +165,11 @@
 
 
 
-
-
-    //CTOR
-    public ReviewEditor()
-    {
-    }
-
-
-
     //FUNCTIONS
     protected override void OnInitialized()
     {
         //if chip and vendor was not provided
-        if (Chip == null && Vendor == null)
+        if (ChipUrl == null && VendorUrl == null)
         {
             //try get review from global variables, end here
             if (_globalVariable.ReviewInFocus != null)
@@ -196,8 +187,11 @@
         else
         {
             //add in the chip & vendor details from url
-            Review.Chip = Chip;
-            Review.Vendor = Vendor;
+            Review = new()
+            {
+                Chip = ChipUrl,
+                Vendor = VendorUrl
+            };
         }
 
         //refresh the page
@@ -244,8 +238,9 @@
         this.StateHasChanged();
     }
 
-
-
+    //Sends user back to Chip page
+    private void BackToChipButtonClicked() => _navigation.NavigateTo($"/{Review.Vendor}/{Review.Chip}");
+    
 
 
 
