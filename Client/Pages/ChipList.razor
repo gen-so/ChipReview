@@ -10,14 +10,14 @@
         <th scope="col">Vendor</th>
         <th scope="col">Total Rating</th>
         <th scope="col">Review Count</th>
-        <th scope="col">Release Date</th>
+        <th scope="col">Release Date</th>   
     </tr>
     </thead>
     <tbody>
     @foreach (var chip in _chipList)
     {
         <tr>
-            <td scope="row">@chip.Model</td>
+            <td scope="row"><a href="/@chip.Vendor/@chip.Model">@chip.Model</a></td>
             <td>@chip.Vendor</td>
             <td>@chip.TotalRating</td>
             <td>@chip.ReviewCount</td>
